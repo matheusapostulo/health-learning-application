@@ -363,6 +363,10 @@ Ainda dando enfoque e se aprofundando no usuário, para simplificar, iremos list
 
 
 # IMPLEMENTAÇÃO
+## Arquitetura
+Nossa arquitetura basicamente vai ser xxx
+A seguir temos a figura do esquema da arquitetura do sistema:
+
 ## Banco de Dados
 Foi feito todo uma construção para chegar no banco de dados atual (o banco ainda está sujeito à mudanças). A seguir mostraremos algumas das principais etapas:
 
