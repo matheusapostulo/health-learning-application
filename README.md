@@ -368,17 +368,10 @@ Nossa arquitetura basicamente vai ser xxx
 A seguir temos a figura do esquema da arquitetura do sistema:
 
 ## Banco de Dados
-Foi feito todo uma construção para chegar no banco de dados atual (o banco ainda está sujeito à mudanças). A seguir mostraremos algumas das principais etapas:
-
-### Modelo conceitual no BrModelo
-![image](https://github.com/matheusapostulo/HealthLearning/assets/73514316/72fb0943-8281-4d26-b23f-55903c0fb314)
-
-### Modelo lógico no BrModelo
-![image](https://github.com/matheusapostulo/HealthLearning/assets/73514316/efec2106-cb72-4015-9365-eda11148efe2)
+O banco de dados utilizado será o MongoDB. Isso se deve pela característica dos nossos Modelos, que terão atributos diferentes entre eles. Além disso, até aqui, as consultas que serão exigidas se mostraram relativamente simples, e, além disso, não necessitaremos de Transações.
 
 ### Banco de Dados físico e hospedagem 
-O Banco foi hospedado na planet scale através da AWS. A PlanetScale fornece hospedagem gratuita no plano de 10 bilhões de leituras e 10 milhões de escritas mensais.  
-Obs: Foram feitas alterações nas chaves estrangeiras nas tabelas devido ao modo que a plataforma faz querys!
+O Banco vai ser hospedado no Atlas do MongoDB já que mudamos para um banco de dados não relacional!
 
 **Favoritos**  
 ![image](https://github.com/matheusapostulo/HealthLearning/assets/73514316/513397b9-b184-42a0-9719-2ee149ee0cc5)
