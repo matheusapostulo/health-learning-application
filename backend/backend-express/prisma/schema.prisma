@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Model {
-  modelId      String   @id @default(auto()) @map("_id") @db.ObjectId
+  modelId      String   @id @default(uuid()) @map("_id")
   modelName    String
   description  String
   accuracy     Float
