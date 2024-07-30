@@ -1,5 +1,5 @@
 import Model from "../../domain/Model";
-import ModelRepository from "../../infra/repository/ModelRepository";
+import ModelRepository from "../repository/ModelRepository";
 
 
 export default class CreateModel {
@@ -8,7 +8,7 @@ export default class CreateModel {
     }
 
     async execute(input: InputCreateModel): Promise<OutputCreateModel>{
-        const model = Model.create(input.modelName, input.description, input.accuracy, input.parameters);
+        const model = Model.create(input.modelName, input.category, input.description, input.accuracy, input.parameters);
         await this.modelRepository.saveModel(model);
         return {
             modelId: model.modelId
@@ -23,6 +23,7 @@ type Parameter = {
 
 interface InputCreateModel {
     modelName: string;
+    category: string;
     description: string;
     accuracy: number;
     parameters: Parameter[];

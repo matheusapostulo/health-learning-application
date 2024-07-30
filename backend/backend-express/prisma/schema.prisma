@@ -16,6 +16,7 @@ datasource db {
 model Model {
   modelId      String   @id @default(uuid()) @map("_id")
   modelName    String
+  category     String
   description  String
   accuracy     Float
   parameters   Parameter[]

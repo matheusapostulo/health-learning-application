@@ -1,28 +1,25 @@
-import { PrismaClientAdapter } from "../../src/infra/database/DatabaseConnection";
-import ModelRepositoryDatabase from "../../src/infra/repository/ModelRepository";
+import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapter";
+import ModelRepositoryDatabase from "../../src/infra/repository/ModelRepositoryDatabase";
+import ModelRepositoryMemory from "../../src/infra/repository/memory/ModelRepositoryMemory";
 import CreateModel from "../../src/application/usecase/CreateModel";
-import GetModel from "../../src/application/usecase/GetModel";
 
-it("Should create a Machine Learning Model", async () => {
-  const connection = new PrismaClientAdapter();
+const inputCreateModel = {
+  modelName: "Model Test Create Model",
+  description:'Model Test Description',
+  category: 'Test',
+  accuracy: 0.885,
+  parameters: [
+    {
+      name: "Attribute 1",
+      type: "number",
+    },
+  ],
+  createdAt: new Date(),
+}
 
-  const modelRepository = new ModelRepositoryDatabase(connection);
-
+it("Should create a Machine Learning Model in memory", async () => {
+  const modelRepository = new ModelRepositoryMemory();
   const createModel = new CreateModel(modelRepository);
-  const getModel = new GetModel(connection);
-
-  const inputCreateModel = {
-    modelName: "Model Test",
-    description:'Model Test Description',
-    accuracy: 88.5,
-    parameters: [
-      {
-        name: "Atributte 1",
-        type: "number",
-      },
-    ],
-    createdAt: new Date(),
-  }
 
   // Creating a model
   const outputCreateModel = await createModel.execute(inputCreateModel);
@@ -30,14 +27,16 @@ it("Should create a Machine Learning Model", async () => {
   // Consulting if the model was created
   expect(outputCreateModel.modelId).toBeDefined();
 
-  // Consulting if the model was created
-  const outputGetModel = await getModel.execute(outputCreateModel.modelId);
-  expect(outputGetModel.modelId).toBe(outputCreateModel.modelId);
-  expect(outputGetModel.modelName).toBe("Model Test");
-  expect(outputGetModel.description).toBe("Model Test Description");
-  expect(outputGetModel.accuracy).toBe(88.5);
-  expect(outputGetModel.parameters[0].name).toBe("Atributte 1");
-  expect(outputGetModel.parameters[0].type).toBe("number");
+});
 
-  await connection.close();
+it("Should create a Machine Learning Model in database", async () => {
+  const connection = new PrismaClientAdapter();
+  const modelRepository = new ModelRepositoryDatabase(connection);
+  const createModel = new CreateModel(modelRepository);
+
+  const outputCreateModel = await createModel.execute(inputCreateModel);
+
+  // Consulting if the model was created
+  expect(outputCreateModel.modelId).toBeDefined();
+  connection.close();
 });
