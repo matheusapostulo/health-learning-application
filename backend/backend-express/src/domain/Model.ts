@@ -23,6 +23,11 @@ export default class Model {
         if(parameters.length === 0){
             throw new Error("Parameters is required")
         }
+        parameters.forEach(parameter => {
+            if(!Object.values(typeParameter).includes(parameter.type)){
+                throw new Error("Invalid parameter type")
+            }
+        });
     }
 
     static create(modelName:string, category:string, description:string, accuracy:number, parameters:Parameter[]){
@@ -32,7 +37,13 @@ export default class Model {
     }
 }
 
-type Parameter = {
+export type Parameter = {
     name: string;
-    type: string;
+    type: typeParameter;
+}
+
+export enum typeParameter {
+    Number = "number",
+    String = "string",
+    Boolean = "boolean"
 }

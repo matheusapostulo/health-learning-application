@@ -1,6 +1,6 @@
 import DatabaseConnectionMemory from "../../src/infra/database/memory/DatabaseConnectionMemory";
 import GetModel from "../../src/application/usecase/GetModel";
-import Model from "../../src/domain/Model";
+import Model, { typeParameter } from "../../src/domain/Model";
 import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapter";
 import ModelRepositoryDatabase from "../../src/infra/repository/ModelRepositoryDatabase";
 import CreateModel from "../../src/application/usecase/CreateModel";
@@ -13,7 +13,7 @@ const inputCreateModel = {
     parameters: [
         {
             name: "Attribute 1",
-            type: "number",
+            type: typeParameter.Number,
         },
     ],
 }

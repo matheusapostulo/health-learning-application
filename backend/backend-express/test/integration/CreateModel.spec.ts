@@ -2,6 +2,7 @@ import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapte
 import ModelRepositoryDatabase from "../../src/infra/repository/ModelRepositoryDatabase";
 import ModelRepositoryMemory from "../../src/infra/repository/memory/ModelRepositoryMemory";
 import CreateModel from "../../src/application/usecase/CreateModel";
+import { typeParameter } from "../../src/domain/Model";
 
 const inputCreateModel = {
   modelName: "Model Test Create Model",
@@ -11,7 +12,7 @@ const inputCreateModel = {
   parameters: [
     {
       name: "Attribute 1",
-      type: "number",
+      type: typeParameter.Number,
     },
   ],
   createdAt: new Date(),

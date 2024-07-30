@@ -1,4 +1,4 @@
-import Model from "../../src/domain/Model"
+import Model, { typeParameter } from "../../src/domain/Model"
 
 describe("Model unit tests", () => {
     const inputModel = {
@@ -9,7 +9,7 @@ describe("Model unit tests", () => {
         parameters: [
             {
                 name: "parameter",
-                type: "type"
+                type: typeParameter.Number
             }
         ]
     }
@@ -23,6 +23,12 @@ describe("Model unit tests", () => {
         expect(model.parameters).toBe(inputModel.parameters)
         expect(model.createdAt).toBeDefined()
         expect(model.updatedAt).toBeUndefined()
+    })
+
+    it("Shouldn't create a model with parameters type different from the enum", () => {
+        expect(() => {
+            Model.create(inputModel.modelName, inputModel.category, inputModel.description, inputModel.accuracy, [{name: "parameter", type: "none"}])
+        }).toThrow("Invalid parameter type")
     })
 
     it("Shouldn't create a model with an accuracy of less than 0 and greater than 1", () => {

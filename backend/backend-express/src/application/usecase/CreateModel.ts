@@ -1,4 +1,4 @@
-import Model from "../../domain/Model";
+import Model, { Parameter } from "../../domain/Model";
 import ModelRepository from "../repository/ModelRepository";
 
 
@@ -14,11 +14,6 @@ export default class CreateModel {
             modelId: model.modelId
         };
     }
-}
-
-type Parameter = {
-    name: string;
-    type: string;
 }
 
 interface InputCreateModel {

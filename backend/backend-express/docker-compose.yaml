@@ -1,8 +1,12 @@
 services:
-  mongodb:
-    image: mongodb/mongodb-community-server:6.0-ubi8
+  mongo:
+    build: ./mongodb_rs
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: health_learning
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: "27017"
     ports:
       - 27017:27017
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=user
-      - MONGO_INITDB_ROOT_PASSWORD=pass

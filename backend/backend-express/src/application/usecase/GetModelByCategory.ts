@@ -1,3 +1,4 @@
+import { Parameter } from "../../domain/Model";
 import DatabaseConnection from "../../infra/database/DatabaseConnection";
 
 export default class GetModelByCategory {
@@ -12,11 +13,6 @@ export default class GetModelByCategory {
             }
             return models;
         }
-}
-
-type Parameter = {
-    name: string;
-    type: string;
 }
 
 interface OutputGetModelByCategory {

@@ -1,6 +1,6 @@
 import CreateModel from "../../src/application/usecase/CreateModel";
 import GetModelByCategory from "../../src/application/usecase/GetModelByCategory";
-import Model from "../../src/domain/Model";
+import Model, { typeParameter } from "../../src/domain/Model";
 import DatabaseConnectionMemory from "../../src/infra/database/memory/DatabaseConnectionMemory";
 import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapter";
 import ModelRepositoryDatabase from "../../src/infra/repository/ModelRepositoryDatabase";
@@ -15,7 +15,7 @@ it("Should get Machine Learning Model's by category in memory", async () => {
     parameters: [
       {
         name: "Attribute 1",
-        type: "number",
+        type: typeParameter.Boolean,
       },
     ],
     createdAt: new Date(),
@@ -29,7 +29,7 @@ it("Should get Machine Learning Model's by category in memory", async () => {
     parameters: [
       {
         name: "Attribute 1",
-        type: "number",
+        type: typeParameter.Boolean,
       },
     ],
     createdAt: new Date(),
@@ -62,7 +62,7 @@ it("Should get Machine Learning Model's by category in database", async () => {
     parameters: [
       {
         name: "Attribute 1",
-        type: "number",
+        type: typeParameter.Number,
       },
     ],
     createdAt: new Date(),
@@ -76,7 +76,7 @@ it("Should get Machine Learning Model's by category in database", async () => {
     parameters: [
       {
         name: "Attribute 1",
-        type: "number",
+        type: typeParameter.Number,
       },
     ],
     createdAt: new Date(),
