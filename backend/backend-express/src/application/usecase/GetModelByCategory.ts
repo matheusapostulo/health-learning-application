@@ -1,5 +1,6 @@
 import { Parameter } from "../../domain/Model";
-import DatabaseConnection from "../../infra/database/DatabaseConnection";
+import DatabaseConnection from "../database/DatabaseConnection";
+
 
 export default class GetModelByCategory {
         
@@ -7,7 +8,7 @@ export default class GetModelByCategory {
         }
     
         async execute(category: string): Promise<OutputGetModelByCategory[]>{
-            const models = await this.connection.findByCategory(category);
+            const models = await this.connection.findModelByCategory(category);
             if(models.length === 0){
                 throw new Error('Any model in this category was found');
             }
@@ -22,6 +23,8 @@ interface OutputGetModelByCategory {
     description: string;
     accuracy: number;
     parameters: Parameter[];
+    favoritedBy: string[];
+    favoritesCount: number;
     createdAt: Date;
     updatedAt?: Date;
 }

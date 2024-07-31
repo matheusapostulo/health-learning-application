@@ -1,26 +1,33 @@
 import Model from "../../../domain/Model";
-import DatabaseConnection from "../DatabaseConnection";
+import User from "../../../domain/User";
+import DatabaseConnection from "../../../application/database/DatabaseConnection";
 
 export default class DatabaseConnectionMemory implements DatabaseConnection {
     models: Model[] = [];
+    users: User[] = [];
 
     constructor(){
         this.models = [];
     }
 
-    async create(model: Model): Promise<any> {
+    async createModel(model: Model): Promise<any> {
         this.models.push(model);
         return model.modelId;
     }
     
-    async findUnique(modelId: string): Promise<any> {
+    async findUniqueModel(modelId: string): Promise<any> {
         const model = this.models.find(model => model.modelId === modelId);
         return model;
     } 
     
-    async findByCategory(category: string): Promise<any> {
+    async findModelByCategory(category: string): Promise<any> {
         const models = this.models.filter(model => model.category === category);
         return models;
+    }
+
+    async createUser(user: User): Promise<any> {
+        this.users.push(user);
+        return user.userId;
     }
 
     async close(): Promise<void> {

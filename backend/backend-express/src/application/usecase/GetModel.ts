@@ -1,5 +1,6 @@
 import { Parameter } from "../../domain/Model";
-import DatabaseConnection from "../../infra/database/DatabaseConnection";
+import DatabaseConnection from "../database/DatabaseConnection";
+
 
 export default class GetModel {
     
@@ -7,7 +8,7 @@ export default class GetModel {
     }
 
     async execute(modelId: string): Promise<OutputGetModel>{
-        const model = await this.connection.findUnique(modelId);
+        const model = await this.connection.findUniqueModel(modelId);
         if(!model){
             throw new Error('Model not found');
         }
@@ -22,6 +23,8 @@ interface OutputGetModel {
     description: string;
     accuracy: number;
     parameters: Parameter[];
+    favoritedBy: string[];
+    favoritesCount: number;
     createdAt: Date;
     updatedAt?: Date;
 }

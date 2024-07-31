@@ -23,7 +23,7 @@ it("Should get a Machine Learning Model in memory", async () => {
     const getModel = new GetModel(connection);
     
     const model = Model.create(inputCreateModel.modelName, inputCreateModel.category, inputCreateModel.description, inputCreateModel.accuracy, inputCreateModel.parameters);
-    await connection.create(model);
+    await connection.createModel(model);
     const outputGetModel = await getModel.execute(model.modelId);
     
     expect(outputGetModel.modelId).toBe(model.modelId);

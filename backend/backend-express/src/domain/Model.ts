@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 export default class Model {
-    constructor(readonly modelId:string, readonly modelName:string, readonly category:string, readonly description:string, readonly accuracy:number, readonly parameters:Parameter[], readonly createdAt:Date, readonly updatedAt?:Date){ 
+    constructor(readonly modelId:string, readonly modelName:string, readonly category:string, readonly description:string, readonly accuracy:number, readonly parameters:Parameter[], private favoritedBy: string[], private favoritesCount: number, readonly createdAt:Date, readonly updatedAt?:Date){ 
         if(!accuracy){
             throw new Error("Accuracy is required")
         }
@@ -33,7 +33,21 @@ export default class Model {
     static create(modelName:string, category:string, description:string, accuracy:number, parameters:Parameter[]){
         const modelId = crypto.randomUUID();
         const date = new Date();
-        return new Model(modelId, modelName, category, description, accuracy, parameters, date);
+        const favoritedBy: string[] = [];
+        const favoritesCount = 0;
+        return new Model(modelId, modelName, category, description, accuracy, parameters, favoritedBy, favoritesCount, date);
+    }
+
+    getFavoritesCount(){
+        return this.favoritesCount;
+    }
+
+    getFavoritedBy(){
+        return this.favoritedBy;
+    }
+
+    incrementFavoritesCount(){
+        this.favoritesCount++;
     }
 }
 

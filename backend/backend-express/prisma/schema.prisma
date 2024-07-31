@@ -14,14 +14,26 @@ datasource db {
 }
 
 model Model {
-  modelId      String   @id @default(uuid()) @map("_id")
-  modelName    String
-  category     String
-  description  String
-  accuracy     Float
-  parameters   Parameter[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  modelId        String      @id @default(uuid()) @map("_id")
+  modelName      String
+  category       String
+  description    String
+  accuracy       Float
+  parameters     Parameter[]
+  favoritedBy    String[]    @default(uuid())
+  usersId        User[]      @relation(fields: [favoritedBy], references: [userId])
+  favoritesCount Int
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model User {
+  userId          String   @id @default(uuid()) @map("_id")
+  name            String
+  email           String
+  password        String
+  favoritedModels String[] @default(uuid())
+  modelsId        Model[]  @relation(fields: [favoritedModels], references: [modelId])
 }
 
 type Parameter {

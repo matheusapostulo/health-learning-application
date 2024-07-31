@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import Model from '../../domain/Model';
-import DatabaseConnection from './DatabaseConnection';
+import DatabaseConnection from '../../application/database/DatabaseConnection';
+import User from '../../domain/User';
 
 
 export class PrismaClientAdapter implements DatabaseConnection{
@@ -10,7 +11,7 @@ export class PrismaClientAdapter implements DatabaseConnection{
         this.connection = new PrismaClient();
     }
 
-    async create(model: Model): Promise<any> {
+    async createModel(model: Model): Promise<any> {
         return this.connection.model.create({
             data: {
                 modelId: model.modelId,
@@ -24,12 +25,14 @@ export class PrismaClientAdapter implements DatabaseConnection{
                         type: parameter.type
                     }
                 }),
+                favoritedBy: model.getFavoritedBy(),
+                favoritesCount: model.getFavoritesCount(),
                 createdAt: model.createdAt
             }
         });
     }
 
-    async findUnique(modelId: string): Promise<any> {
+    async findUniqueModel(modelId: string): Promise<any> {
         return this.connection.model.findUnique({
             where: {
                 modelId: modelId
@@ -37,12 +40,24 @@ export class PrismaClientAdapter implements DatabaseConnection{
         });
     }
 
-    async findByCategory(category: string): Promise<any> {
+    async findModelByCategory(category: string): Promise<any> {
         return this.connection.model.findMany({
             where: {
                 category: category
             }
         });
+    }
+
+    async createUser(user: User): Promise<any> {
+        return this.connection.user.create({
+            data: {
+                userId: user.userId,
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                favoritedModels: user.getFavoriteModels()
+            }
+        })
     }
 
     async close(): Promise<void> {

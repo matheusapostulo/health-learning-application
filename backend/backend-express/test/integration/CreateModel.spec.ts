@@ -41,3 +41,4 @@ it("Should create a Machine Learning Model in database", async () => {
   expect(outputCreateModel.modelId).toBeDefined();
   connection.close();
 });
+
