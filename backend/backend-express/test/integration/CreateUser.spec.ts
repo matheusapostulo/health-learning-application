@@ -9,7 +9,8 @@ it("Should create a User in database", async () => {
     const createUser = new CreateUser(userRepository);
 
     const inputCreateUser = {
-        name: "User Test",
+        name: "User",
+        lastName: "Test",
         email: "email@test.com",
         password: "123456",
     }
