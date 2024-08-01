@@ -15,11 +15,11 @@ export class PrismaClientAdapter implements DatabaseConnection{
         return this.connection.model.create({
             data: {
                 modelId: model.modelId,
-                modelName: model.modelName,
-                category: model.category,
-                description: model.description,
-                accuracy: model.accuracy,
-                parameters: model.parameters.map(parameter => {
+                modelName: model.getName(),
+                category: model.getCategory(),
+                description: model.getDescription(),
+                accuracy: model.getAccuracy(),
+                parameters: model.getParameters().map(parameter => {
                     return {
                         name: parameter.name,
                         type: parameter.type
@@ -52,9 +52,10 @@ export class PrismaClientAdapter implements DatabaseConnection{
         return this.connection.user.create({
             data: {
                 userId: user.userId,
-                name: user.name,
-                email: user.email,
-                password: user.password,
+                name: user.getName(),
+                lastName: user.getLastName(),
+                email: user.getEmail(),
+                password: user.getPassword(),
                 favoritedModels: user.getFavoriteModels()
             }
         })

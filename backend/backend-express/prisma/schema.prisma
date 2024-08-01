@@ -30,6 +30,7 @@ model Model {
 model User {
   userId          String   @id @default(uuid()) @map("_id")
   name            String
+  lastName        String
   email           String
   password        String
   favoritedModels String[] @default(uuid())
