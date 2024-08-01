@@ -1,22 +1,28 @@
 import User from "../../src/domain/User";
+import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
 
-describe("User unit tests", () => {
+describe("User unit tests",  () => {
     const inputCreateUser = {
         name: "User",
         lastName: "Test",
         email: "email@test.com",
         password: "123456",
     }
-    
+
+    const encryptService = new BcryptEncryptService();
+
     // This user is created to be used in some tests
-    const user = User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password);
+    let user: User;
+    beforeAll(async () => {
+        user = await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password, encryptService);
+    });
     
     // Here we're also testing the get methods
-    it("Should create a user", () => {
+    it("Should create a user", async () => {
         expect(user.userId).toBeDefined();
         expect(user.getName()).toBe(inputCreateUser.name);
         expect(user.getEmail()).toBe(inputCreateUser.email);
-        expect(user.getPassword()).toBe(inputCreateUser.password);
+        expect(await user.validatePassword(inputCreateUser.password, encryptService)).toBeTruthy();
         expect(user.getFavoriteModels()).toStrictEqual([]);
     });
     
@@ -55,21 +61,42 @@ describe("User unit tests", () => {
     });
 
     describe("User throw errors when create", () => {
-        it("Should throw an error when the user name is empty", () => {
-            expect(() => {
-                User.create("", inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password);
-            }).toThrow("Name is required");
+        it("Should throw an error when the user name is empty", async () => {
+            expect.assertions(1);
+            try {
+                await User.create("", inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password, encryptService);
+            } catch (error) {
+                expect(error.message).toBe('Name is required');
+            };
         });
-        it("Should throw an error when the user email is empty", () => {
-            expect(() => {
-                User.create(inputCreateUser.name, inputCreateUser.lastName, "", inputCreateUser.password);
-            }).toThrow("Email is required");
+        it("Should throw an error when the user email is empty", async () => {
+            expect.assertions(1);
+            try {
+                await User.create(inputCreateUser.name, inputCreateUser.lastName, "", inputCreateUser.password, encryptService);
+            } catch (error) {
+                expect(error.message).toBe("Email is required");
+            };
         });
-        it("Should throw an error when the user password is empty", () => {
-            expect(() => {
-                User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, "");
-            }).toThrow("Password is required");
+
+        it("Should throw an error when the user password is empty", async () => {
+            expect.assertions(1);
+            try {
+                await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, "", encryptService);
+            } catch (error) {
+                expect(error.message).toBe("Password is required");
+            };
         });
+
+        it("Should throw an error when the user password is wrong", async () => {
+            expect.assertions(1);
+            try {
+                const user = await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, "password", encryptService);
+                await user.validatePassword("wrongPassword", encryptService);
+            } catch (error) {
+                expect(error.message).toBe("Invalid password");
+            };
+        });
+        
     });
 });
     

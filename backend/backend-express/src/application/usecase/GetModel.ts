@@ -1,5 +1,5 @@
 import { Parameter } from "../../domain/Model";
-import DatabaseConnection from "../database/DatabaseConnection";
+import DatabaseConnection from "../ports/database/DatabaseConnection";
 
 
 export default class GetModel {
@@ -8,7 +8,7 @@ export default class GetModel {
     }
 
     async execute(modelId: string): Promise<OutputGetModel>{
-        const model = await this.connection.findUniqueModel(modelId);
+        const model = await this.connection.findUnique(modelId, 'model');
         if(!model){
             throw new Error('Model not found');
         }

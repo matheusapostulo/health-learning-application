@@ -1,5 +1,5 @@
 import { Parameter } from "../../domain/Model";
-import DatabaseConnection from "../database/DatabaseConnection";
+import DatabaseConnection from "../ports/database/DatabaseConnection";
 
 
 export default class GetModelByCategory {

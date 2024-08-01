@@ -1,4 +1,4 @@
-import DatabaseConnection from "../../application/database/DatabaseConnection";
+import DatabaseConnection from "../../application/ports/database/DatabaseConnection";
 import ModelRepository from "../../application/repository/ModelRepository";
 import Model from "../../domain/Model";
 
@@ -9,11 +9,11 @@ export default class ModelRepositoryDatabase implements ModelRepository{
     }
     
     async saveModel(model: Model){
-        await this.connection.createModel(model);
+        await this.connection.create(model, 'model');
     }
 
     async getModel(modelId: string){
-        const model = await this.connection.findUniqueModel(modelId);
+        const model = await this.connection.findUnique(modelId, 'model');
 
         if(!model){
             throw new Error('Model not found');

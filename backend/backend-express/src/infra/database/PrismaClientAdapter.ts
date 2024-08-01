@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import Model from '../../domain/Model';
-import DatabaseConnection from '../../application/database/DatabaseConnection';
+import DatabaseConnection from '../../application/ports/database/DatabaseConnection';
 import User from '../../domain/User';
 
 
@@ -11,33 +11,39 @@ export class PrismaClientAdapter implements DatabaseConnection{
         this.connection = new PrismaClient();
     }
 
-    async createModel(model: Model): Promise<any> {
-        return this.connection.model.create({
-            data: {
-                modelId: model.modelId,
-                modelName: model.getName(),
-                category: model.getCategory(),
-                description: model.getDescription(),
-                accuracy: model.getAccuracy(),
-                parameters: model.getParameters().map(parameter => {
-                    return {
-                        name: parameter.name,
-                        type: parameter.type
+    async create(entity: any): Promise<any> {
+        const entityName = this.getEntityName(entity);
+        switch(entityName){
+            case 'model':
+                return this.connection.model.create({
+                    data: {
+                        ...entity
                     }
-                }),
-                favoritedBy: model.getFavoritedBy(),
-                favoritesCount: model.getFavoritesCount(),
-                createdAt: model.createdAt
-            }
-        });
+                });
+            case 'user':
+                return this.connection.user.create({
+                    data: {
+                        ...entity
+                    }
+                });
+        }
     }
 
-    async findUniqueModel(modelId: string): Promise<any> {
-        return this.connection.model.findUnique({
-            where: {
-                modelId: modelId
-            }
-        });
+    async findUnique(id: string, entityName: string): Promise<any> {
+        switch(entityName){
+            case 'model':
+                return this.connection.model.findUnique({
+                    where: {
+                        modelId: id
+                    }
+                });
+            case 'user':
+                return this.connection.user.findUnique({
+                    where: {
+                        userId: id
+                    }
+                });
+        }
     }
 
     async findModelByCategory(category: string): Promise<any> {
@@ -48,20 +54,17 @@ export class PrismaClientAdapter implements DatabaseConnection{
         });
     }
 
-    async createUser(user: User): Promise<any> {
-        return this.connection.user.create({
-            data: {
-                userId: user.userId,
-                name: user.getName(),
-                lastName: user.getLastName(),
-                email: user.getEmail(),
-                password: user.getPassword(),
-                favoritedModels: user.getFavoriteModels()
-            }
-        })
-    }
-
     async close(): Promise<void> {
         this.connection.$disconnect(); 
+    }
+
+    private getEntityName<T>(entity: T): string {
+        if (entity instanceof Model) {
+            return 'model';
+        } else if (entity instanceof User) {
+            return 'user';
+        } else {
+            throw new Error('Tipo de entidade não suportado');
+        }
     }
 }

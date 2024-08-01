@@ -6,6 +6,10 @@ export default class UserRepositoryDatabase implements UserRepository {
     }
 
     async saveUser(user: User): Promise<void> {
-        await this.connection.createUser(user);
+        await this.connection.create(user);
+    }
+
+    async getUser(userEmail: string): Promise<any> {
+        return Promise.resolve();
     }
 }

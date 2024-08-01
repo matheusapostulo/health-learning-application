@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import EncryptService from '../application/ports/EncryptService';
 
 export default class User {
     
@@ -8,18 +9,20 @@ export default class User {
         private lastName: string,
         private email: string, 
         private password: string, 
-        private favoriteModels: string[]
+        private favoritedModels: string[],
     ){ 
         if(!name) throw new Error("Name is required");
         if(!lastName) throw new Error("LastName is required");
         if(!email) throw new Error("Email is required");
-        if(!password) throw new Error("Password is required");
     }
-
-    static create(name: string, lastName: string, email: string, password: string) {
+    
+    static async create(name: string, lastName: string, email: string, password: string, encryptService: EncryptService) {
         const userId = crypto.randomUUID();
         const favoritedModels: string[] = [];
-        return new User(userId, name, lastName, email, password, favoritedModels);
+        // Generating a encrypted password
+        if(!password) throw new Error("Password is required");
+        const encryptedPassword = await encryptService.encrypt(password);
+        return new User(userId, name, lastName, email, encryptedPassword, favoritedModels);
     }
 
     getName() {
@@ -55,14 +58,20 @@ export default class User {
     }
 
     getFavoriteModels() {
-        return this.favoriteModels;
+        return this.favoritedModels;
     }
 
     addFavoriteModel(modelId: string) {
-        this.favoriteModels.push(modelId);
+        this.favoritedModels.push(modelId);
     }
 
     removeFavoriteModel(modelId: string) {
-        this.favoriteModels = this.favoriteModels.filter(model => model !== modelId);
+        this.favoritedModels = this.favoritedModels.filter(model => model !== modelId);
+    }
+
+    async validatePassword(password: string, encryptService: EncryptService) {
+        const valid = await encryptService.compare(password, this.password);
+        if(!valid) throw new Error("Invalid password");
+        return valid;
     }
 }

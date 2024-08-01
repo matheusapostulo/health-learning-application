@@ -1,6 +1,6 @@
 import Model from "../../../domain/Model";
 import User from "../../../domain/User";
-import DatabaseConnection from "../../../application/database/DatabaseConnection";
+import DatabaseConnection from "../../../application/ports/database/DatabaseConnection";
 
 export default class DatabaseConnectionMemory implements DatabaseConnection {
     models: Model[] = [];
@@ -10,27 +10,43 @@ export default class DatabaseConnectionMemory implements DatabaseConnection {
         this.models = [];
     }
 
-    async createModel(model: Model): Promise<any> {
-        this.models.push(model);
-        return model.modelId;
+    async create(entity: any): Promise<any> {
+        const entityName = this.getEntityName(entity);
+        switch(entityName){
+            case 'model':
+                this.models.push(entity);
+                return entity.modelId;
+            case 'user':
+                this.users.push(entity);
+                return entity.userId;
+        }
     }
     
-    async findUniqueModel(modelId: string): Promise<any> {
-        const model = this.models.find(model => model.modelId === modelId);
-        return model;
+    async findUnique(id: string, entityName: string): Promise<any> {
+        switch(entityName){
+            case 'model':
+                return this.models.find(model => model.modelId === id);
+            case 'user':
+                return this.users.find(user => user.userId === id);
+        }
     } 
     
     async findModelByCategory(category: string): Promise<any> {
-        const models = this.models.filter(model => model.category === category);
+        const models = this.models.filter(model => model.getCategory() === category);
         return models;
-    }
-
-    async createUser(user: User): Promise<any> {
-        this.users.push(user);
-        return user.userId;
     }
 
     async close(): Promise<void> {
         return Promise.resolve();
+    }
+
+    private getEntityName<T>(entity: T): string {
+        if (entity instanceof Model) {
+            return 'model';
+        } else if (entity instanceof User) {
+            return 'user';
+        } else {
+            throw new Error('Tipo de entidade não suportado');
+        }
     }
 }
