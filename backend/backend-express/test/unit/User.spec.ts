@@ -19,7 +19,7 @@ describe("User unit tests",  () => {
     
     // Here we're also testing the get methods
     it("Should create a user", async () => {
-        expect(user.userId).toBeDefined();
+        expect(user.id).toBeDefined();
         expect(user.getName()).toBe(inputCreateUser.name);
         expect(user.getEmail()).toBe(inputCreateUser.email);
         expect(await user.validatePassword(inputCreateUser.password, encryptService)).toBeTruthy();

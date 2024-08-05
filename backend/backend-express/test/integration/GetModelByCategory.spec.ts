@@ -41,8 +41,8 @@ it("Should get Machine Learning Model's by category in memory", async () => {
 
   const model1 = Model.create(inputCreateModel1.modelName, inputCreateModel1.category, inputCreateModel1.description, inputCreateModel1.accuracy, inputCreateModel1.parameters);
   const model2 = Model.create(inputCreateModel2.modelName, inputCreateModel2.category, inputCreateModel2.description, inputCreateModel2.accuracy, inputCreateModel2.parameters);
-  await connection.create(model1, 'model');
-  await connection.create(model2, 'model');
+  await connection.create(model1);
+  await connection.create(model2);
 
   const outputGetModelByCategory = await getModelByCategory.execute('Test Category in Memory');
 
@@ -95,5 +95,6 @@ it("Should get Machine Learning Model's by category in database", async () => {
   outputGetModelByCategory.forEach((model) => {
     expect(model.category).toBe('Test Category Database');
   });
-  connection.close();
+  
+  await connection.close();
 });

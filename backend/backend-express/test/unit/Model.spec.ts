@@ -16,7 +16,7 @@ describe("Model unit tests", () => {
     it("Should create a model", () => {
         
         const model = Model.create(inputModel.modelName, inputModel.category, inputModel.description, inputModel.accuracy, inputModel.parameters)    
-        expect(model.modelId).toBeDefined()
+        expect(model.id).toBeDefined()
         expect(model.getName()).toBe(inputModel.modelName)
         expect(model.getDescription()).toBe(inputModel.description)
         expect(model.getAccuracy()).toBe(inputModel.accuracy)

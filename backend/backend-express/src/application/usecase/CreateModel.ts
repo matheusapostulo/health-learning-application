@@ -11,7 +11,7 @@ export default class CreateModel {
         const model = Model.create(input.modelName, input.category, input.description, input.accuracy, input.parameters);
         await this.modelRepository.saveModel(model);
         return {
-            modelId: model.modelId
+            id: model.id
         };
     }
 }
@@ -25,5 +25,5 @@ interface InputCreateModel {
 }
 
 interface OutputCreateModel {
-    modelId: string;
+    id: string;
 }

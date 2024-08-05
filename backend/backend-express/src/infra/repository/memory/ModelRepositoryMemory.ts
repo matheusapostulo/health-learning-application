@@ -12,8 +12,8 @@ export default class ModelRepositoryMemory implements ModelRepository{
         this.models.push(model);
     }
 
-    async getModel(modelId: string): Promise<Model>{
-        const model = this.models.find(model => model.modelId === modelId);
+    async getModel(id: string): Promise<Model>{
+        const model = this.models.find(model => model.id === id);
         if(!model){
             throw new Error('Model not found');
         }

@@ -9,17 +9,17 @@ export default class ModelRepositoryDatabase implements ModelRepository{
     }
     
     async saveModel(model: Model){
-        await this.connection.create(model, 'model');
+        await this.connection.create(model);
     }
 
-    async getModel(modelId: string){
-        const model = await this.connection.findUnique(modelId, 'model');
+    async getModel(id: string){
+        const model = await this.connection.findUnique(id, 'model');
 
         if(!model){
             throw new Error('Model not found');
         }
 
         // Here we'll abstract the database model to the domain model
-        return new Model(model.modelId, model.modelName, model.description, model.accuracy, model.parameters, model.favoritedBy, model.favoritesCount, model.createdAt, model.updatedAt);
+        return new Model(model.id, model.modelName, model.description, model.accuracy, model.parameters, model.favoritedBy, model.favoritesCount, model.createdAt, model.updatedAt);
     }
 }

@@ -24,9 +24,9 @@ it("Should get a Machine Learning Model in memory", async () => {
     
     const model = Model.create(inputCreateModel.modelName, inputCreateModel.category, inputCreateModel.description, inputCreateModel.accuracy, inputCreateModel.parameters);
     await connection.create(model);
-    const outputGetModel = await getModel.execute(model.modelId);
+    const outputGetModel = await getModel.execute(model.id);
     
-    expect(outputGetModel.modelId).toBe(model.modelId);
+    expect(outputGetModel.id).toBe(model.id);
     expect(outputGetModel.modelName).toBe("Model Test Get Model");
     expect(outputGetModel.description).toBe("Model Test Description");
     expect(outputGetModel.accuracy).toBe(0.885);
@@ -42,13 +42,14 @@ it("Should get a Machine Learning Model in database", async () => {
     
     const getModel = new GetModel(connection);
     // Consulting if the model was created right
-    const outputGetModel = await getModel.execute(outputCreateModel.modelId);
-    expect(outputGetModel.modelId).toBe(outputCreateModel.modelId);
+    const outputGetModel = await getModel.execute(outputCreateModel.id);
+    expect(outputGetModel.id).toBe(outputCreateModel.id);
     expect(outputGetModel.modelName).toBe("Model Test Get Model");
     expect(outputGetModel.category).toBe("Test");
     expect(outputGetModel.description).toBe("Model Test Description");
     expect(outputGetModel.accuracy).toBe(0.885);
     expect(outputGetModel.parameters[0].name).toBe("Attribute 1");
     expect(outputGetModel.parameters[0].type).toBe("number");
-    connection.close();
+    
+    await connection.close();
 });

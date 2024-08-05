@@ -29,19 +29,19 @@ export class PrismaClientAdapter implements DatabaseConnection{
         }
     }
 
-    async findUnique(id: string, entityName: string): Promise<any> {
+    async findUnique(paramToFind: string, entityName: string): Promise<any> {
         switch(entityName){
             case 'model':
                 return this.connection.model.findUnique({
                     where: {
-                        modelId: id
+                        id: paramToFind
                     }
                 });
             case 'user':
                 return this.connection.user.findUnique({
                     where: {
-                        userId: id
-                    }
+                        email: paramToFind,
+                    },
                 });
         }
     }

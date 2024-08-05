@@ -17,7 +17,7 @@ export default class GetModelByCategory {
 }
 
 interface OutputGetModelByCategory {
-    modelId: string;
+    id: string;
     modelName: string;
     category: string;
     description: string;

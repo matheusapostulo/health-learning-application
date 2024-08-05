@@ -4,25 +4,26 @@ import EncryptService from '../application/ports/EncryptService';
 export default class User {
     
     constructor(
-        readonly userId:string, 
+        readonly id:string, 
         private name: string, 
         private lastName: string,
         private email: string, 
         private password: string, 
         private favoritedModels: string[],
     ){ 
+        if(!id) throw new Error("Id is required");
         if(!name) throw new Error("Name is required");
         if(!lastName) throw new Error("LastName is required");
         if(!email) throw new Error("Email is required");
     }
     
     static async create(name: string, lastName: string, email: string, password: string, encryptService: EncryptService) {
-        const userId = crypto.randomUUID();
+        const id = crypto.randomUUID();
         const favoritedModels: string[] = [];
         // Generating a encrypted password
         if(!password) throw new Error("Password is required");
         const encryptedPassword = await encryptService.encrypt(password);
-        return new User(userId, name, lastName, email, encryptedPassword, favoritedModels);
+        return new User(id, name, lastName, email, encryptedPassword, favoritedModels);
     }
 
     getName() {
@@ -61,12 +62,12 @@ export default class User {
         return this.favoritedModels;
     }
 
-    addFavoriteModel(modelId: string) {
-        this.favoritedModels.push(modelId);
+    addFavoriteModel(id: string) {
+        this.favoritedModels.push(id);
     }
 
-    removeFavoriteModel(modelId: string) {
-        this.favoritedModels = this.favoritedModels.filter(model => model !== modelId);
+    removeFavoriteModel(id: string) {
+        this.favoritedModels = this.favoritedModels.filter(model => model !== id);
     }
 
     async validatePassword(password: string, encryptService: EncryptService) {

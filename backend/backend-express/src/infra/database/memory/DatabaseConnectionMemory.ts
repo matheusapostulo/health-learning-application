@@ -15,19 +15,19 @@ export default class DatabaseConnectionMemory implements DatabaseConnection {
         switch(entityName){
             case 'model':
                 this.models.push(entity);
-                return entity.modelId;
+                return entity.id;
             case 'user':
                 this.users.push(entity);
-                return entity.userId;
+                return entity.id;
         }
     }
     
-    async findUnique(id: string, entityName: string): Promise<any> {
+    async findUnique(paramToFind: string, entityName: string): Promise<any> {
         switch(entityName){
             case 'model':
-                return this.models.find(model => model.modelId === id);
+                return this.models.find(model => model.id === paramToFind);
             case 'user':
-                return this.users.find(user => user.userId === id);
+                return this.users.find(user => user.getEmail() === paramToFind);
         }
     } 
     
@@ -46,7 +46,7 @@ export default class DatabaseConnectionMemory implements DatabaseConnection {
         } else if (entity instanceof User) {
             return 'user';
         } else {
-            throw new Error('Tipo de entidade não suportado');
+            throw new Error('This entity is not supported');
         }
     }
 }

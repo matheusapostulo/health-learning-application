@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 export default class Model {
     constructor(
-        readonly modelId: string,
+        readonly id: string,
         private modelName: string,
         private category: string,
         private description: string,
@@ -16,7 +16,7 @@ export default class Model {
         // Validation
         if (!accuracy) throw new Error("Accuracy is required")
         if (accuracy < 0 || accuracy > 1) throw new Error("Accuracy must be between 0 and 1")
-        if (!modelId) throw new Error("ModelId is required")
+        if (!id) throw new Error("Id is required")
         if (!modelName) throw new Error("ModelName is required")
         if (!category) throw new Error("Category is required")
         if (!description) throw new Error("Description is required")
@@ -27,11 +27,11 @@ export default class Model {
 
     // Method to create a new model. It's gonna create using the constructor and return a new instance of Model
     static create(modelName:string, category:string, description:string, accuracy:number, parameters:Parameter[]){
-        const modelId = crypto.randomUUID();
+        const id = crypto.randomUUID();
         const createdAndUpdatedDate = new Date();
         const favoritedBy: string[] = [];
         const favoritesCount = 0;
-        return new Model(modelId, modelName, category, description, accuracy, parameters, favoritedBy, favoritesCount, createdAndUpdatedDate, createdAndUpdatedDate);
+        return new Model(id, modelName, category, description, accuracy, parameters, favoritedBy, favoritesCount, createdAndUpdatedDate, createdAndUpdatedDate);
     }
     
     // Name methods
@@ -105,13 +105,13 @@ export default class Model {
         this.favoritesCount--;
     }
 
-    addFavorite(userId: string){
-        this.favoritedBy.push(userId);
+    addFavorite(id: string){
+        this.favoritedBy.push(id);
         this.incrementFavoritesCount();
     }
 
-    removeFavorite(userId: string){
-        this.favoritedBy = this.favoritedBy.filter(favorite => favorite !== userId);
+    removeFavorite(id: string){
+        this.favoritedBy = this.favoritedBy.filter(favorite => favorite !== id);
         this.decrementFavoritesCount();
     }
 
