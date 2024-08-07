@@ -4,19 +4,20 @@ import UserRepositoryDatabase from "../../src/infra/repository/UserRepositoryDat
 import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
 import crypto from "crypto";
 
+// It'll be used for both tests
+const randomEmail = `${crypto.randomBytes(10).toString('hex')}@test.com`;
+const inputCreateUser = {
+    name: "User",
+    lastName: "Test",
+    email: randomEmail,
+    password: "123456",
+}
+const connection = new PrismaClientAdapter();
+const userRepository = new UserRepositoryDatabase(connection);
+const encryptService = new BcryptEncryptService();
+
 it("Should create a User in database", async () => {
-    const connection = new PrismaClientAdapter();
-    const userRepository = new UserRepositoryDatabase(connection);
-    const encryptService = new BcryptEncryptService();
-
     const createUser = new CreateUser(userRepository, encryptService, connection);
-
-    const inputCreateUser = {
-        name: "User",
-        lastName: "Test",
-        email: `${crypto.randomBytes(10).toString('hex')}@test.com`,
-        password: "123456",
-    }
 
     const outputCreateUser = await createUser.execute(inputCreateUser);
 
@@ -26,5 +27,11 @@ it("Should create a User in database", async () => {
 })
 
 it("Shouldn't create a user if the email already exists ", async () => { 
-
+    const createUser = new CreateUser(userRepository, encryptService, connection);
+    expect.assertions(1);
+    try {
+        await createUser.execute(inputCreateUser);
+    } catch (error) {
+        expect(error.message).toBe('User already exists');
+    };
 });

@@ -54,8 +54,34 @@ export class PrismaClientAdapter implements DatabaseConnection{
         });
     }
 
+    async transaction(): Promise<void> {
+        this.connection.transaction();
+    }
+
     async close(): Promise<void> {
         this.connection.$disconnect(); 
+    }
+
+    async favoriteUnfavoriteModelTransaction(user: User, model: Model): Promise<void> {
+        await this.connection.$transaction([
+            this.connection.model.update({
+                where: {
+                    id: model.id
+                },
+                data: {
+                    favoritedBy: model.getFavoritedBy(),
+                    favoritesCount: model.getFavoritesCount()
+                }
+            }),
+            this.connection.user.update({
+                where: {
+                    email: user.getEmail()
+                },
+                data: {
+                    favoritedModels: user.getFavoriteModels()
+                }
+            })
+        ]);
     }
 
     private getEntityName<T>(entity: T): string {
@@ -64,7 +90,7 @@ export class PrismaClientAdapter implements DatabaseConnection{
         } else if (entity instanceof User) {
             return 'user';
         } else {
-            throw new Error('Tipo de entidade não suportado');
+            throw new Error('This entity is not supported');
         }
     }
 }

@@ -12,7 +12,7 @@ export default class ModelRepositoryDatabase implements ModelRepository{
         await this.connection.create(model);
     }
 
-    async getModel(id: string){
+    async getModel(id: string): Promise<Model> {
         const model = await this.connection.findUnique(id, 'model');
 
         if(!model){
@@ -20,6 +20,6 @@ export default class ModelRepositoryDatabase implements ModelRepository{
         }
 
         // Here we'll abstract the database model to the domain model
-        return new Model(model.id, model.modelName, model.description, model.accuracy, model.parameters, model.favoritedBy, model.favoritesCount, model.createdAt, model.updatedAt);
+        return new Model(model.id, model.modelName, model.category, model.description, model.accuracy, model.parameters, model.favoritedBy, model.favoritesCount, model.createdAt, model.updatedAt);
     }
 }

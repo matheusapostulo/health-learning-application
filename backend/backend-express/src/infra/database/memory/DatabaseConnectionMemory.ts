@@ -36,6 +36,10 @@ export default class DatabaseConnectionMemory implements DatabaseConnection {
         return models;
     }
 
+    async favoriteUnfavoriteModelTransaction(user: User, model: Model): Promise<void> {
+        return Promise.resolve();
+    }
+
     async close(): Promise<void> {
         return Promise.resolve();
     }
