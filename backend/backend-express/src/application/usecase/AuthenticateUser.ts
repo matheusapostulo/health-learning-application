@@ -5,7 +5,11 @@ import UserRepository from "../repository/UserRepository";
 
 export default class AuthenticateUser {
 
-    constructor(readonly connection: DatabaseConnection, readonly encryptService: EncryptService, readonly userRepository: UserRepository, readonly jwtService: JwtService) {
+    constructor(
+        readonly connection: DatabaseConnection, 
+        readonly encryptService: EncryptService, 
+        readonly userRepository: UserRepository, 
+        readonly jwtService: JwtService) {
     }
 
     async execute(input: InputAuthenticateUser): Promise<OutputAuthenticateUser> {

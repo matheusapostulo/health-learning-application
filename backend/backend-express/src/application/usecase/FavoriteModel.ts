@@ -1,11 +1,13 @@
-
-import DatabaseConnection from "../ports/database/DatabaseConnection";
 import ModelRepository from "../repository/ModelRepository";
+import TransactionRepository from "../repository/TransactionRepository";
 import UserRepository from "../repository/UserRepository";
 
 export default class FavoriteModel {
 
-    constructor(readonly connection: DatabaseConnection, readonly userRepository: UserRepository, readonly modelRepository: ModelRepository) {        
+    constructor(
+        readonly userRepository: UserRepository, 
+        readonly modelRepository: ModelRepository, 
+        readonly transacionRepository: TransactionRepository) {        
     }
 
     async execute(input: InputFavoriteModel): Promise<void> {
@@ -18,7 +20,7 @@ export default class FavoriteModel {
         // Doing the mutation on the user domain
         user.addFavoriteModel(model.id);
         // Updating the user and model with the transaction repository
-        await this.connection.favoriteUnfavoriteModelTransaction(user, model);
+        await this.transacionRepository.favoriteUnfavoriteModelTransaction(user, model);
     }
 }
 

@@ -5,7 +5,10 @@ import UserRepository from "../repository/UserRepository";
 
 export default class CreateUser {
 
-    constructor(readonly userRepository: UserRepository, readonly encryptService: EncryptService, readonly connection: DatabaseConnection) {
+    constructor(
+        readonly userRepository: UserRepository, 
+        readonly encryptService: EncryptService, 
+        readonly connection: DatabaseConnection) {
     }
 
     async execute(input: InputCreateUser): Promise<OutputCreateUser> {
