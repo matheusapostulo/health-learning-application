@@ -7,7 +7,7 @@ export default class GetModel {
     constructor(readonly connection: DatabaseConnection){
     }
 
-    async execute(id: string): Promise<OutputGetModel>{
+    async execute(id: string): Promise<OutputGetModelDto>{
         const model = await this.connection.findUnique(id, 'model');
         if(!model){
             throw new Error('Model not found');
@@ -16,7 +16,7 @@ export default class GetModel {
     }
 }
 
-interface OutputGetModel {
+export interface OutputGetModelDto {
     id: string;
     modelName: string;
     category: string;

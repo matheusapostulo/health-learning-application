@@ -1,5 +1,5 @@
 import CreateModel from "../../src/application/usecase/CreateModel";
-import GetModelByCategory from "../../src/application/usecase/GetModelByCategory";
+import GetModelsByCategory from "../../src/application/usecase/GetModelsByCategory";
 import Model, { typeParameter } from "../../src/domain/Model";
 import DatabaseConnectionMemory from "../../src/infra/database/memory/DatabaseConnectionMemory";
 import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapter";
@@ -37,17 +37,17 @@ it("Should get Machine Learning Model's by category in memory", async () => {
 
   const connection = new DatabaseConnectionMemory();
   
-  const getModelByCategory = new GetModelByCategory(connection);
+  const getModelsByCategory = new GetModelsByCategory(connection);
 
   const model1 = Model.create(inputCreateModel1.modelName, inputCreateModel1.category, inputCreateModel1.description, inputCreateModel1.accuracy, inputCreateModel1.parameters);
   const model2 = Model.create(inputCreateModel2.modelName, inputCreateModel2.category, inputCreateModel2.description, inputCreateModel2.accuracy, inputCreateModel2.parameters);
   await connection.create(model1);
   await connection.create(model2);
 
-  const outputGetModelByCategory = await getModelByCategory.execute('Test Category in Memory');
+  const outputGetModelsByCategory = await getModelsByCategory.execute('Test Category in Memory');
 
-  expect(outputGetModelByCategory.length).toBe(2);
-  outputGetModelByCategory.forEach((model) => {
+  expect(outputGetModelsByCategory.length).toBe(2);
+  outputGetModelsByCategory.forEach((model) => {
     expect(model.category).toBe('Test Category in Memory');
   });
 
@@ -82,7 +82,7 @@ it("Should get Machine Learning Model's by category in database", async () => {
     createdAt: new Date(),
   }
   const connection = new PrismaClientAdapter();
-  const getModelByCategory = new GetModelByCategory(connection);
+  const getModelsByCategory = new GetModelsByCategory(connection);
   const modelRepository = new ModelRepositoryDatabase(connection);
   const createModel = new CreateModel(modelRepository);
 
@@ -90,9 +90,9 @@ it("Should get Machine Learning Model's by category in database", async () => {
   await createModel.execute(inputCreateModel2);
   
   // Consulting if the model was created
-  const outputGetModelByCategory = await getModelByCategory.execute('Test Category Database');
+  const outputGetModelsByCategory = await getModelsByCategory.execute('Test Category Database');
 
-  outputGetModelByCategory.forEach((model) => {
+  outputGetModelsByCategory.forEach((model) => {
     expect(model.category).toBe('Test Category Database');
   });
   
