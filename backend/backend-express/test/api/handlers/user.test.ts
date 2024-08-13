@@ -9,6 +9,11 @@ const GetUserUseCase = require('../../../src/application/usecase/GetUser.ts')
 const CreateUserUseCase = require('../../../src/application/usecase/CreateUser.ts')
 const FavoriteModelUseCase = require('../../../src/application/usecase/FavoriteModel')
 const UnfavoriteModelUseCase = require('../../../src/application/usecase/UnfavoriteModel')
+// Mocking the user usecases
+jest.mock('../../../src/application/usecase/GetUser.ts')
+jest.mock('../../../src/application/usecase/CreateUser.ts')
+jest.mock('../../../src/application/usecase/FavoriteModel')
+jest.mock('../../../src/application/usecase/UnfavoriteModel')
 
 describe('getUser', () => {
     const mockOutput = { id: '123', name: 'user', lastName: 'test', email: "email@test.com", favoritedModels: []};
