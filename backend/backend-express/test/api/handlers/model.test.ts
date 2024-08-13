@@ -8,8 +8,6 @@ import { typeParameter } from "../../../src/domain/Model";
 const GetModelUseCase = require('../../../src/application/usecase/GetModel')
 const GetModelsByCategoryUseCase = require('../../../src/application/usecase/GetModelsByCategory')
 const CreateModelUseCase = require('../../../src/application/usecase/CreateModel')
-const FavoriteModelUseCase = require('../../../src/application/usecase/FavoriteModel')
-const UnfavoriteModelUseCase = require('../../../src/application/usecase/UnfavoriteModel')
 // Mocking the model usecases
 jest.mock('../../../src/application/usecase/GetModel')
 jest.mock('../../../src/application/usecase/GetModelsByCategory')
@@ -140,14 +138,3 @@ describe('createModel', () => {
     });
 })
 
-// describe('favoriteModel', () => {
-//     it('', () => {
-//         expect(true).toBe(true);
-//     });
-// })
-
-// describe('unfavoriteModel', () => {
-//     it('', () => {
-//         expect(true).toBe(true);
-//     });
-// })

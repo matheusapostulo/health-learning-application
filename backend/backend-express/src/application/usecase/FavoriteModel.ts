@@ -10,7 +10,7 @@ export default class FavoriteModel {
         readonly transacionRepository: TransactionRepository) {        
     }
 
-    async execute(input: InputFavoriteModel): Promise<void> {
+    async execute(input: InputFavoriteModelDto): Promise<void> {
         // Obtaining the user as domain to make mutation
         const user = await this.userRepository.getUser(input.userEmail);
         // Obtaining the model as domain to make mutation
@@ -24,7 +24,7 @@ export default class FavoriteModel {
     }
 }
 
-interface InputFavoriteModel {
+export interface InputFavoriteModelDto {
     userEmail: string,
     modelId: string
 }

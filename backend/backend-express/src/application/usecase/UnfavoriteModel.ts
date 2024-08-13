@@ -10,7 +10,7 @@ export default class UnfavoriteModel {
         readonly transactionRepository: TransactionRepository){
     }
 
-    async execute(input: InputUnfavoriteModel): Promise<void>{
+    async execute(input: InputUnfavoriteModelDto): Promise<void>{
         // Taking the model from the database
         const model = await this.modelRepository.getModel(input.modelId);
         // Taking the user from the database
@@ -24,7 +24,7 @@ export default class UnfavoriteModel {
     }
 }
 
-interface InputUnfavoriteModel{
+export interface InputUnfavoriteModelDto{
     userEmail: string;
     modelId: string;
 }
