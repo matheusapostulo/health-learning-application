@@ -2,16 +2,19 @@ import { Request, Response } from "express";
 // Importing routes
 import GetUserRoute from './../../../src/infra/api/express/routes/user/GetUser.express.route';
 import CreateUserRoute from './../../../src/infra/api/express/routes/user/CreateUser.express.route.ts';
+import AuthenticateUserRoute from './../../../src/infra/api/express/routes/user/AuthenticateUser.express.route.ts';
 import FavoriteModelRoute from './../../../src/infra/api/express/routes/user/FavoriteModel.express.route';
 import UnfavoriteModelRoute from '../../../src/infra/api/express/routes/user/UnfavoriteModel.express.route.ts';
 // Mocking usecases
 const GetUserUseCase = require('../../../src/application/usecase/GetUser.ts')
 const CreateUserUseCase = require('../../../src/application/usecase/CreateUser.ts')
+const AuthenticateUserUseCase = require('../../../src/application/usecase/AuthenticateUser.ts')
 const FavoriteModelUseCase = require('../../../src/application/usecase/FavoriteModel')
 const UnfavoriteModelUseCase = require('../../../src/application/usecase/UnfavoriteModel')
 // Mocking the user usecases
 jest.mock('../../../src/application/usecase/GetUser.ts')
 jest.mock('../../../src/application/usecase/CreateUser.ts')
+jest.mock('../../../src/application/usecase/AuthenticateUser.ts')
 jest.mock('../../../src/application/usecase/FavoriteModel')
 jest.mock('../../../src/application/usecase/UnfavoriteModel')
 
@@ -40,7 +43,7 @@ describe('getUser', () => {
         expect(getUserRoute.getPath()).toBe('/users/:email');
     });
 
-    it('Should get a model with getHandler method', async () => {
+    it('Should get a user with getHandler method', async () => {
         const handler = getUserRoute.getHandler();
         await handler(req, res);
 
@@ -82,7 +85,7 @@ describe('createUser', () => {
         expect(createUserRoute.getPath()).toBe('/users');
     });
 
-    it('Should create a model with getHandler method', async () => {
+    it('Should create a user with getHandler method', async () => {
         const handler = createUserRoute.getHandler();
         await handler(req, res);
 
@@ -93,8 +96,42 @@ describe('createUser', () => {
 })
 
 describe('authenticateUser', () => {
-    it('', () => {
-        expect(true).toBe(true);
+    const mockOutput = { token: "12345" };
+    // Mocking the GetModel execute method
+    AuthenticateUserUseCase.execute = jest.fn();
+    AuthenticateUserUseCase.execute.mockResolvedValue(mockOutput);
+
+    const InputAuthenticateUser = {
+        email: "user@gmail.com",
+        password: "1234"
+    }
+
+    const req = { 
+        body: InputAuthenticateUser
+    } as unknown as Request;
+    const res = { 
+        status: jest.fn().mockReturnThis(), 
+        json: jest.fn() 
+    } as unknown as Response;
+
+    // Route
+    const authenticateUserRoute = AuthenticateUserRoute.create(AuthenticateUserUseCase);
+
+    it('Should get the route api method with getMethod method', () => {
+        expect(authenticateUserRoute.getMethod()).toBe('post');
+    });
+    
+    it("Should get the handler api path with getPath method", () => {
+        expect(authenticateUserRoute.getPath()).toBe('/auth/login');
+    });
+
+    it('Should get authenticate a user with getHandler method', async () => {
+        const handler = authenticateUserRoute.getHandler();
+        await handler(req, res);
+
+        expect(AuthenticateUserUseCase.execute).toHaveBeenCalledWith(InputAuthenticateUser);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(mockOutput);
     });
 });
 
@@ -128,7 +165,7 @@ describe('favoriteModel', () => {
         expect(favoriteModelRoute.getPath()).toBe('/users/:userEmail/favorites/:modelId');
     });
 
-    it('Should create a model with getHandler method', async () => {
+    it('Should favorite a model with getHandler method', async () => {
         const handler = favoriteModelRoute.getHandler();
         await handler(req, res);
 
@@ -168,7 +205,7 @@ describe('unfavoriteModel', () => {
         expect(unfavoriteModelRoute.getPath()).toBe('/users/:userEmail/favorites/:modelId');
     });
 
-    it('Should create a model with getHandler method', async () => {
+    it('Should unfavorite a model with getHandler method', async () => {
         const handler = unfavoriteModelRoute.getHandler();
         await handler(req, res);
 

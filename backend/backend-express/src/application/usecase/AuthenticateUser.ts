@@ -12,7 +12,7 @@ export default class AuthenticateUser {
         readonly jwtService: JwtService) {
     }
 
-    async execute(input: InputAuthenticateUser): Promise<OutputAuthenticateUser> {
+    async execute(input: InputAuthenticateUserDto): Promise<OutputAuthenticateUserDto> {
         try {
             // Checking if the user exists and obtaining the user
             const user = await this.userRepository.getUser(input.email);
@@ -32,11 +32,11 @@ export default class AuthenticateUser {
     }
 }
 
-interface InputAuthenticateUser {
+export interface InputAuthenticateUserDto {
     email: string,
     password: string,
 }
 
-interface OutputAuthenticateUser {
+export interface OutputAuthenticateUserDto {
     token: string;
 }
