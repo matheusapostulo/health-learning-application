@@ -4,7 +4,7 @@ import { OutputCreateUserDto } from "../../../../../application/usecase/CreateUs
 import Route, { HttpMethod } from "../Route";
 import { Request, Response } from "express";
 
-export default class CreateModelRoute implements Route {
+export default class CreateUserRoute implements Route {
 
     constructor(
         private readonly path: string,
@@ -13,7 +13,7 @@ export default class CreateModelRoute implements Route {
     ) {}
 
     public static create(CreateUserUseCase: Usecase){
-        return new CreateModelRoute(
+        return new CreateUserRoute(
             '/users', 
             HttpMethod.POST, 
             CreateUserUseCase
