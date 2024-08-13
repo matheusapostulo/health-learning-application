@@ -147,7 +147,7 @@ describe('favoriteModel', () => {
     }
 
     const req = { 
-        body: InputFavoriteModel
+        params: InputFavoriteModel
     } as unknown as Request;
     const res = { 
         status: jest.fn().mockReturnThis(), 
@@ -187,7 +187,7 @@ describe('unfavoriteModel', () => {
     }
 
     const req = { 
-        body: InputUnfavoriteModel
+        params: InputUnfavoriteModel
     } as unknown as Request;
     const res = { 
         status: jest.fn().mockReturnThis(), 

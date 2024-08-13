@@ -20,6 +20,7 @@ import UserRepositoryDatabase from "./infra/repository/UserRepositoryDatabase";
 import BcryptEncryptService from "./infra/services/BcryptEncryptService";
 import JsonwebtokenJwtService from "./infra/services/JsonwebtokenJwtService";
 import TransactionRepositoryDatabase from "./infra/repository/TransactionRepositoryDatabase";
+import UnfavoriteModel from "./application/usecase/UnfavoriteModel";
 
 function main() {
     // Connection to the database
@@ -42,7 +43,7 @@ function main() {
     const getUser = new GetUser(connection);
     const createUser = new CreateUser(userRepository, encryptService, connection);
     const favoriteModel = new FavoriteModel(userRepository, modelRepository, transactionRepository);
-    const unfavoriteModel = new FavoriteModel(userRepository, modelRepository, transactionRepository);
+    const unfavoriteModel = new UnfavoriteModel(userRepository, modelRepository, transactionRepository);
 
     // Importing routes
     const getModelRoute = GetModelRoute.create(getModel);

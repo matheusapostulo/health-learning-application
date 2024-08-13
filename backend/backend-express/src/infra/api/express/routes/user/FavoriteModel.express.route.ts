@@ -22,7 +22,8 @@ export default class FavoriteModelRoute implements Route {
     public getHandler() {
         return async (request: Request, response: Response) => {
             try {
-                const input: InputFavoriteModelDto = request.body;
+                const {userEmail, modelId} = request.params;
+                const input: InputFavoriteModelDto = {userEmail, modelId};
                 await this.FavoriteModelUseCase.execute(input);
                 
                 response.status(200).json({message: 'Model favorited successfully'});

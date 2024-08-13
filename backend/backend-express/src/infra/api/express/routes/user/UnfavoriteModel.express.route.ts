@@ -22,7 +22,8 @@ export default class UnfavoriteModelRoute implements Route {
     public getHandler() {
         return async (request: Request, response: Response) => {
             try {
-                const input: InputUnfavoriteModelDto = request.body;
+                const {userEmail, modelId} = request.params;
+                const input: InputUnfavoriteModelDto = {userEmail, modelId};
                 await this.UnfavoriteModelUseCase.execute(input);
                 
                 response.status(200).json({message: 'Model unfavorited successfully'});
