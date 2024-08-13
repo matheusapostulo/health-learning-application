@@ -11,7 +11,7 @@ export default class CreateUser {
         readonly connection: DatabaseConnection) {
     }
 
-    async execute(input: InputCreateUser): Promise<OutputCreateUser> {
+    async execute(input: InputCreateUserDto): Promise<OutputCreateUserDto> {
         const userExists = await this.connection.findUnique(input.email, 'user');
         // Should'n create a user if it already exists
         if(userExists){
@@ -25,13 +25,13 @@ export default class CreateUser {
     }
 }
 
-interface InputCreateUser {
+export interface InputCreateUserDto {
     name: string,
     lastName: string,
     email: string,
     password: string,
 }
 
-interface OutputCreateUser {
+export interface OutputCreateUserDto {
     id: string;
 }

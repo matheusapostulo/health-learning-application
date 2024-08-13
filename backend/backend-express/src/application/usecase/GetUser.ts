@@ -3,7 +3,7 @@ import DatabaseConnection from "../ports/database/DatabaseConnection";
 export default class GetUser {
     constructor(readonly connection: DatabaseConnection) {
     }
-    async execute(email: string): Promise<OutputGetUser> {
+    async execute(email: string): Promise<OutputGetUserDto> {
         const user = await this.connection.findUnique(email, 'user');
         if(!user){
             throw new Error('User not found');
@@ -18,7 +18,7 @@ export default class GetUser {
     }   
 }
 
-interface OutputGetUser {
+export interface OutputGetUserDto {
     id: string;
     name: string;
     lastName: string;
