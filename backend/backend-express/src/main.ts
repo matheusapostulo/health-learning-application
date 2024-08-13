@@ -14,6 +14,6 @@ function main() {
     const api = ApiExpress.create([getModelRoute]);
     const port = 3000;
     api.start(port);
-}
+}   
 
 main();

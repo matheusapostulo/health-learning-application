@@ -13,7 +13,7 @@ export default class GetModelRoute implements Route {
 
     public static create(GetModelUsecase: Usecase){
         return new GetModelRoute(
-            '/model/:id', 
+            '/models/:id', 
             HttpMethod.GET, 
             GetModelUsecase
         );
@@ -25,7 +25,6 @@ export default class GetModelRoute implements Route {
 
             const output: OutputGetModelDto = await this.GetModelUseCase.execute(id);
 
-            console.log(output);
             response.status(200).json(output);
         }
     }

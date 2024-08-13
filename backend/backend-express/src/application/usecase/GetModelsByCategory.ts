@@ -7,7 +7,7 @@ export default class GetModelsByCategory {
         constructor(readonly connection: DatabaseConnection){
         }
     
-        async execute(category: string): Promise<OutputGetModelsByCategory[]>{
+        async execute(category: string): Promise<OutputGetModelsByCategoryDto[]>{
             const models = await this.connection.findModelByCategory(category);
             if(models.length === 0){
                 throw new Error('Any model in this category was found');
@@ -16,7 +16,7 @@ export default class GetModelsByCategory {
         }
 }
 
-interface OutputGetModelsByCategory {
+export interface OutputGetModelsByCategoryDto {
     id: string;
     modelName: string;
     category: string;

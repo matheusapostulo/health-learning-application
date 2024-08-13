@@ -7,7 +7,7 @@ export default class CreateModel {
     constructor(readonly modelRepository: ModelRepository){
     }
 
-    async execute(input: InputCreateModel): Promise<OutputCreateModel>{
+    async execute(input: InputCreateModelDto): Promise<OutputCreateModelDto>{
         const model = Model.create(input.modelName, input.category, input.description, input.accuracy, input.parameters);
         await this.modelRepository.saveModel(model);
         return {
@@ -16,7 +16,7 @@ export default class CreateModel {
     }
 }
 
-interface InputCreateModel {
+export interface InputCreateModelDto {
     modelName: string;
     category: string;
     description: string;
@@ -24,6 +24,6 @@ interface InputCreateModel {
     parameters: Parameter[];
 }
 
-interface OutputCreateModel {
+export interface OutputCreateModelDto {
     id: string;
 }

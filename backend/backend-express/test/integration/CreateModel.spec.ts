@@ -14,8 +14,7 @@ const inputCreateModel = {
       name: "Attribute 1",
       type: typeParameter.Number,
     },
-  ],
-  createdAt: new Date(),
+  ]
 }
 
 it("Should create a Machine Learning Model in memory", async () => {

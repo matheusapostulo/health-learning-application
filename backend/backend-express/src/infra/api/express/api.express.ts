@@ -35,7 +35,7 @@ export default class ApiExpress implements Api{
     private listRoutes(){
         const routes = this.app._router.stack
             .filter((route: any) => route.route)
-            .map((route: any) => {
+            .map((route: any) => {  
                 return {
                     path: route.route.path,
                     method: route.route.stack[0].method
