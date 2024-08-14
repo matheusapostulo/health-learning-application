@@ -15,6 +15,10 @@ export default class UnfavoriteModel {
         const model = await this.modelRepository.getModel(input.modelId);
         // Taking the user from the database
         const user = await this.userRepository.getUser(input.userEmail);
+        // Checking if the user does not have the model as favorite
+        if(!user.getFavoriteModels().includes(model.id)){
+            throw new Error('User does not have this model as favorite');
+        }
         // Doing the mutation in the model
         model.removeFavorite(user.id);
         // Doing the mutation in the user

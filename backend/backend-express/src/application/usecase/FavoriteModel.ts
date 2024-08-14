@@ -15,6 +15,10 @@ export default class FavoriteModel {
         const user = await this.userRepository.getUser(input.userEmail);
         // Obtaining the model as domain to make mutation
         const model = await this.modelRepository.getModel(input.modelId);
+        // Checking if the user already favorited the model
+        if(user.getFavoriteModels().includes(model.id)) {
+            throw new Error('User already favorited this model');
+        }
         // Doing the mutation on the model domain
         model.addFavorite(user.id);
         // Doing the mutation on the user domain

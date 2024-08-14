@@ -63,6 +63,13 @@ it("Should favorite a model by a user", async () => {
     // Get the user to check if it favorited the model
     const outputGetUser = await getUser.execute(randomEmail);
     expect(outputGetUser.favoritedModels[0]).toBe(outputCreateModel.id);
+
+    // Testing if throw error when user already favorited the model
+    try {
+        await favoriteModel.execute(inputFavoriteModel);
+    } catch (error) {
+        expect(error.message).toBe("User already favorited this model");
+    };
     
     await connection.close();
 });

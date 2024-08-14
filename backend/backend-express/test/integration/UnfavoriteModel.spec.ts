@@ -76,5 +76,12 @@ it("Should unfavorite a model by a user", async () => {
     const outputGetUserUnfavorite = await getUser.execute(randomEmail);
     expect(outputGetUserUnfavorite.favoritedModels.length).toBe(0);
 
+    // Testing if is there an error when user already unfavorited a model that wasn't favorited
+    try {
+        await unfavoriteModel.execute(inputFavoriteModel);
+    } catch (error) {
+        expect(error.message).toBe("User does not have this model as favorite");
+    };
+
     await connection.close();
 });
