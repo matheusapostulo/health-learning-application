@@ -1,6 +1,6 @@
 import Usecase from "../../../../../application/ports/Usecase";
 import { OutputGetModelDto } from "../../../../../application/usecase/GetModel";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
 export default class GetModelRoute implements Route {
@@ -8,14 +8,16 @@ export default class GetModelRoute implements Route {
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly GetModelUseCase: Usecase
+        private readonly GetModelUseCase: Usecase,
+        readonly requireAuthentication: RequiresAuthentication
     ) {}
 
     public static create(GetModelUsecase: Usecase){
         return new GetModelRoute(
             '/models/:id', 
             HttpMethod.GET, 
-            GetModelUsecase
+            GetModelUsecase,
+            RequiresAuthentication.NOT_REQUIRES_AUTHENTICATION
         );
     }
 

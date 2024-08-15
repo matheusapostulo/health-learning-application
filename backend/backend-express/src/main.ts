@@ -64,7 +64,7 @@ function main() {
         getUserRoute, createUserRoute, 
         favoriteModelRoute, 
         unfavoriteModelRoute
-    ]);
+    ], jwtService);
     const port = 3000;
     api.start(port);
 }   

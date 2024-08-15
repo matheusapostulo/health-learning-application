@@ -1,6 +1,6 @@
 import { InputUnfavoriteModelDto } from '../../../../../application/usecase/UnfavoriteModel';
 import Usecase from "../../../../../application/ports/Usecase";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
 export default class UnfavoriteModelRoute implements Route {
@@ -8,14 +8,16 @@ export default class UnfavoriteModelRoute implements Route {
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly UnfavoriteModelUseCase: Usecase
+        private readonly UnfavoriteModelUseCase: Usecase,
+        readonly requireAuthentication: RequiresAuthentication
     ) {}
 
     public static create(UnfavoriteModelUseCase: Usecase){
         return new UnfavoriteModelRoute(
             '/users/:userEmail/favorites/:modelId', 
             HttpMethod.DELETE, 
-            UnfavoriteModelUseCase
+            UnfavoriteModelUseCase,
+            RequiresAuthentication.REQUIRES_AUTHENTICATION
         );
     }
 

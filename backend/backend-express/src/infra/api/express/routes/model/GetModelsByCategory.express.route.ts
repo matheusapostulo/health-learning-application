@@ -1,21 +1,23 @@
 import Usecase from "../../../../../application/ports/Usecase";
 import { OutputGetModelsByCategoryDto } from "../../../../../application/usecase/GetModelsByCategory";
 import { Request, Response } from "express";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 
 export default class GetModelsByCategoryRoute implements Route {
     
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly GetModelsByCategoryUseCase: Usecase
+        private readonly GetModelsByCategoryUseCase: Usecase,
+        readonly requireAuthentication: RequiresAuthentication
     ) {}
 
     public static create(GetModelsByCategoryUseCase: Usecase){
         return new GetModelsByCategoryRoute(
             '/models/category/:category', 
             HttpMethod.GET, 
-            GetModelsByCategoryUseCase
+            GetModelsByCategoryUseCase,
+            RequiresAuthentication.NOT_REQUIRES_AUTHENTICATION
         );
     }
 

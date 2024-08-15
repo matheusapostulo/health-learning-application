@@ -1,6 +1,6 @@
 import Usecase from "../../../../../application/ports/Usecase";
 import { OutputGetUserDto } from "../../../../../application/usecase/GetUser";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
 export default class GetUserRoute implements Route {
@@ -8,14 +8,16 @@ export default class GetUserRoute implements Route {
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly GetUserUseCase: Usecase
+        private readonly GetUserUseCase: Usecase,
+        readonly requireAuthentication: boolean
     ) {}
 
     public static create(GetUserUseCase: Usecase){
         return new GetUserRoute(
             '/users/:email', 
             HttpMethod.GET, 
-            GetUserUseCase
+            GetUserUseCase,
+            RequiresAuthentication.NOT_REQUIRES_AUTHENTICATION
         );
     }
 

@@ -1,7 +1,7 @@
 import { InputCreateModelDto } from './../../../../../application/usecase/CreateModel';
 import Usecase from "../../../../../application/ports/Usecase";
 import { OutputCreateModelDto } from "../../../../../application/usecase/CreateModel";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
 export default class CreateModelRoute implements Route {
@@ -9,14 +9,16 @@ export default class CreateModelRoute implements Route {
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly GetModelUseCase: Usecase
+        private readonly GetModelUseCase: Usecase,
+        readonly requireAuthentication: RequiresAuthentication
     ) {}
 
     public static create(CreateModelUseCase: Usecase){
         return new CreateModelRoute(
             '/models', 
             HttpMethod.POST, 
-            CreateModelUseCase
+            CreateModelUseCase,
+            RequiresAuthentication.REQUIRES_AUTHENTICATION
         );
     }
 
@@ -37,4 +39,5 @@ export default class CreateModelRoute implements Route {
     public getMethod(): HttpMethod {
         return this.method;
     }
+
 }

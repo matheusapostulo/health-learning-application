@@ -1,7 +1,7 @@
 import { InputAuthenticateUserDto } from './../../../../../application/usecase/AuthenticateUser';
 import Usecase from "../../../../../application/ports/Usecase";
 import { OutputAuthenticateUserDto } from "../../../../../application/usecase/AuthenticateUser";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
 export default class AuthenticateUserRoute implements Route {
@@ -9,14 +9,16 @@ export default class AuthenticateUserRoute implements Route {
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly AuthenticateUserUseCase: Usecase
+        private readonly AuthenticateUserUseCase: Usecase,
+        readonly requireAuthentication: RequiresAuthentication
     ) {}
 
     public static create(AuthenticateUserUseCase: Usecase){
         return new AuthenticateUserRoute(
             '/auth/login', 
             HttpMethod.POST, 
-            AuthenticateUserUseCase
+            AuthenticateUserUseCase,
+            RequiresAuthentication.NOT_REQUIRES_AUTHENTICATION
         );
     }
 

@@ -1,6 +1,6 @@
 import { InputFavoriteModelDto } from './../../../../../application/usecase/FavoriteModel';
 import Usecase from "../../../../../application/ports/Usecase";
-import Route, { HttpMethod } from "../Route";
+import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
 export default class FavoriteModelRoute implements Route {
@@ -8,14 +8,16 @@ export default class FavoriteModelRoute implements Route {
     constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly FavoriteModelUseCase: Usecase
+        private readonly FavoriteModelUseCase: Usecase,
+        readonly requireAuthentication: RequiresAuthentication
     ) {}
 
     public static create(FavoriteModelUseCase: Usecase){
         return new FavoriteModelRoute(
             '/users/:userEmail/favorites/:modelId', 
             HttpMethod.POST, 
-            FavoriteModelUseCase
+            FavoriteModelUseCase,
+            RequiresAuthentication.REQUIRES_AUTHENTICATION
         );
     }
 
