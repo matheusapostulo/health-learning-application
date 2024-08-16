@@ -1,4 +1,7 @@
 import crypto from 'crypto';
+import { Either, left, right } from '../application/errors/either';
+import RequiredParametersError from '../application/errors/RequiredParameters.error';
+import { CreateModelError } from '../application/errors/CreateModel.error';
 
 export default class Model {
     constructor(
@@ -12,26 +15,25 @@ export default class Model {
         private favoritesCount: number,
         readonly createdAt: Date,
         private updatedAt?: Date
-    ) { 
-        // Validation
-        if (!accuracy) throw new Error("Accuracy is required")
-        if (accuracy < 0 || accuracy > 1) throw new Error("Accuracy must be between 0 and 1")
-        if (!id) throw new Error("Id is required")
-        if (!modelName) throw new Error("ModelName is required")
-        if (!category) throw new Error("Category is required")
-        if (!description) throw new Error("Description is required")
-        if (parameters.length === 0) throw new Error("Parameters is required")
-        if(parameters.some(parameter => !parameter.name)) throw new Error("Parameter name is required")
-        if(parameters.some(parameter => !Object.values(typeParameter).includes(parameter.type))) throw new Error("Invalid parameter type")
-    }
+    ) { }
 
     // Method to create a new model. It's gonna create using the constructor and return a new instance of Model
-    static create(modelName:string, category:string, description:string, accuracy:number, parameters:Parameter[]){
+    static create(modelName:string, category:string, description:string, accuracy:number, parameters:Parameter[]) : ResponseCreateModelDomain{
+        // Validation
+        if (accuracy < 0 || accuracy > 1) return left(new CreateModelError.InvalidAccuracyError("Accuracy must be between 0 and 1"))
+        if (!accuracy) return left(new RequiredParametersError("Accuracy"))
+        if (!modelName) return left(new RequiredParametersError("Model Name"))   
+        if (!category) return left(new RequiredParametersError("Category"))
+        if (!description) return left(new RequiredParametersError("Description"))
+        if (parameters.length === 0) return left(new RequiredParametersError("Parameters"))
+        if(parameters.some(parameter => !parameter.name)) return left(new RequiredParametersError("Parameter name"))
+        if(parameters.some(parameter => !Object.values(typeParameter).includes(parameter.type))) return left(new CreateModelError.InvalidParameterTypeError("Invalid parameter type"))
+        // Creating a new model
         const id = crypto.randomUUID();
         const createdAndUpdatedDate = new Date();
         const favoritedBy: string[] = [];
         const favoritesCount = 0;
-        return new Model(id, modelName, category, description, accuracy, parameters, favoritedBy, favoritesCount, createdAndUpdatedDate, createdAndUpdatedDate);
+        return right(new Model(id, modelName, category, description, accuracy, parameters, favoritedBy, favoritesCount, createdAndUpdatedDate, createdAndUpdatedDate));
     }
     
     // Name methods
@@ -69,10 +71,11 @@ export default class Model {
         return this.accuracy;
     }
 
-    updateAccuracy(newAccuracy: number){
+    updateAccuracy(newAccuracy: number) : Either<CreateModelError.InvalidAccuracyError, boolean>{
         // Add validation here
-        if(newAccuracy < 0 || newAccuracy > 1) throw new Error("Accuracy must be between 0 and 1")
+        if(newAccuracy < 0 || newAccuracy > 1) return left(new CreateModelError.InvalidAccuracyError("Accuracy must be between 0 and 1"))
         this.accuracy = newAccuracy;
+        return right(true);
     }
 
     // Parameters methods
@@ -80,11 +83,12 @@ export default class Model {
         return this.parameters;
     }
 
-    addParameter(newParameter: Parameter){
+    addParameter(newParameter: Parameter): Either<RequiredParametersError | CreateModelError.InvalidParameterTypeError, boolean>{
         // Add validation here
-        if(!newParameter.name) throw new Error("Parameter name is required")
-        if(!Object.values(typeParameter).includes(newParameter.type)) throw new Error("Invalid parameter type")
+        if(!newParameter.name) return left(new RequiredParametersError("Parameter name"))
+        if(!Object.values(typeParameter).includes(newParameter.type)) return left(new CreateModelError.InvalidParameterTypeError("Invalid parameter type"))
         this.parameters.push(newParameter);
+        return right(true);
     }
 
     removeParameter(parameterName: string){
@@ -145,3 +149,11 @@ export enum typeParameter {
     String = "string",
     Boolean = "boolean"
 }
+
+export type ResponseCreateModelDomain = Either<
+    RequiredParametersError |
+    CreateModelError.InvalidAccuracyError |
+    CreateModelError.InvalidParameterTypeError
+    ,
+    Model
+>;

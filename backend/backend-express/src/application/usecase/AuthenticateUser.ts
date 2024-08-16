@@ -1,7 +1,11 @@
+import { Either, left, right } from './../errors/either';
 import DatabaseConnection from "../ports/database/DatabaseConnection";
 import EncryptService from "../ports/EncryptService";
 import JwtService from "../ports/JwtService";
 import UserRepository from "../repository/UserRepository";
+import { AppError } from '../errors/AppError.error';
+import { AuthenticateUserError } from '../errors/AuthenticateUser.error';
+import NotFoundError from '../errors/NotFound.error';
 
 export default class AuthenticateUser {
 
@@ -12,23 +16,29 @@ export default class AuthenticateUser {
         readonly jwtService: JwtService) {
     }
 
-    async execute(input: InputAuthenticateUserDto): Promise<OutputAuthenticateUserDto> {
+    async execute(input: InputAuthenticateUserDto): Promise<ResponseAuthenticateUser> {
         try {
             // Checking if the user exists and obtaining the user
             const user = await this.userRepository.getUser(input.email);
+            if(!user){
+                return left(new NotFoundError(input.email));
+            }
             // Checking if the password is correct
-            await user.validatePassword(input.password, this.encryptService);
+            const validPasswordOrError = await user.validatePassword(input.password, this.encryptService);
+            if(validPasswordOrError.isLeft()){
+                return left(validPasswordOrError.value);
+            }
             // If the password is correct, we're gonna generate a token
             const token = await this.jwtService.generateToken({ email: user.getEmail() });
-            return {
+            
+            return right({
                 token: token,
-            }
+            });
+            
         } catch (error) {
-            // Futhermore we'll see how to handle errors in a better way
-            console.error("Authentication error:", error);
-            throw error;
-        }
-        
+            console.log(error)
+            return left(new AppError.UnexpectedError());
+        }     
     }
 }
 
@@ -40,3 +50,11 @@ export interface InputAuthenticateUserDto {
 export interface OutputAuthenticateUserDto {
     token: string;
 }
+
+export type ResponseAuthenticateUser = Either<
+    AppError.UnexpectedError |
+    NotFoundError |
+    AuthenticateUserError.InvalidPasswordError
+    , 
+    OutputAuthenticateUserDto
+>;

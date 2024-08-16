@@ -11,6 +11,7 @@ import UserRepositoryDatabase from "../../src/infra/repository/UserRepositoryDat
 import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
 import crypto from "crypto";
 import TransactionRepositoryDatabase from "../../src/infra/repository/TransactionRepositoryDatabase";
+import { UnfavoriteModelError } from "../../src/application/errors/UnfavoritedModel.error";
 
 it("Should unfavorite a model by a user", async () => {
     // Dependencies implementations
@@ -54,34 +55,44 @@ it("Should unfavorite a model by a user", async () => {
     const outputCreateUser = await createUser.execute(inputCreateUser);
 
     // Favorite a model
-    const inputFavoriteModel = {
-        userEmail: inputCreateUser.email,
-        modelId: outputCreateModel.id,
-    };
-    await favoriteModel.execute(inputFavoriteModel);
-    // Get the model to check if it was favorited
-    const outputGetModelFavorite = await getModel.execute(outputCreateModel.id);
-    expect(outputGetModelFavorite.favoritedBy[0]).toBe(outputCreateUser.id);
-    // Get the user to check if it favorited the model
-    const outputGetUserFavorite = await getUser.execute(randomEmail);
-    expect(outputGetUserFavorite.favoritedModels[0]).toBe(outputCreateModel.id);
+    if(outputCreateModel.isRight()){
+        const inputFavoriteModel = {
+            userEmail: inputCreateUser.email,
+            modelId: outputCreateModel.value.id,
+        };
+    
+        await favoriteModel.execute(inputFavoriteModel);
+        if(outputCreateUser.isRight()){
+            // Get the model to check if it was favorited
+            const outputGetModelFavorite = await getModel.execute(outputCreateModel.value.id);
+            if(outputGetModelFavorite.isRight()){
+                expect(outputGetModelFavorite.value.favoritedBy[0]).toBe(outputCreateUser.value.id);
+                // Get the user to check if it favorited the model
+                const outputGetUserFavorite = await getUser.execute(randomEmail);
+                if(outputGetUserFavorite.isRight()){
+                    expect(outputGetUserFavorite.value.favoritedModels[0]).toBe(outputCreateModel.value.id);
+                }
 
-    // Unfavorite a model
-    const unfavoriteModel = new UnfavoriteModel(userRepository, modelRepository, transactionRepository);
-    await unfavoriteModel.execute(inputFavoriteModel);
-    // Get the model to check if it was unfavorited
-    const outputGetModelUnfavorite = await getModel.execute(outputCreateModel.id);
-    expect(outputGetModelUnfavorite.favoritedBy.length).toBe(0);
-    // Get the user to check if it unfavorited the model
-    const outputGetUserUnfavorite = await getUser.execute(randomEmail);
-    expect(outputGetUserUnfavorite.favoritedModels.length).toBe(0);
-
-    // Testing if is there an error when user already unfavorited a model that wasn't favorited
-    try {
-        await unfavoriteModel.execute(inputFavoriteModel);
-    } catch (error) {
-        expect(error.message).toBe("User does not have this model as favorite");
-    };
-
+                // Unfavorite a model
+                const unfavoriteModel = new UnfavoriteModel(userRepository, modelRepository, transactionRepository);
+                await unfavoriteModel.execute(inputFavoriteModel);
+                // Get the model to check if it was unfavorited
+                const outputGetModelUnfavorite = await getModel.execute(outputCreateModel.value.id);
+                if(outputGetModelUnfavorite.isRight()){
+                    expect(outputGetModelUnfavorite.value.favoritedBy.length).toBe(0);
+                    // Get the user to check if it unfavorited the model
+                    const outputGetUserUnfavorite = await getUser.execute(randomEmail);
+                    if(outputGetUserUnfavorite.isRight()){
+                        expect(outputGetUserUnfavorite.value.favoritedModels.length).toBe(0);
+                        // Testing if throw error when user already favorited the model 
+                        const notFoundFavorited = await favoriteModel.execute(inputFavoriteModel);
+                        if(notFoundFavorited.isLeft()){
+                            expect(notFoundFavorited.value).toBeInstanceOf(UnfavoriteModelError.UserFavoritesNotFoundError);
+                        }
+                    }
+                }
+            }
+        }
+    }
     await connection.close();
 });

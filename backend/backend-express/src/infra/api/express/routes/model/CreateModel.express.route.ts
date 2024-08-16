@@ -1,6 +1,5 @@
-import { InputCreateModelDto } from './../../../../../application/usecase/CreateModel';
+import { InputCreateModelDto, ResponseCreateModel } from './../../../../../application/usecase/CreateModel';
 import Usecase from "../../../../../application/ports/Usecase";
-import { OutputCreateModelDto } from "../../../../../application/usecase/CreateModel";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
@@ -26,9 +25,14 @@ export default class CreateModelRoute implements Route {
         return async (request: Request, response: Response) => {
             const input: InputCreateModelDto = request.body;
 
-            const output: OutputCreateModelDto = await this.GetModelUseCase.execute(input);
+            const output: ResponseCreateModel = await this.GetModelUseCase.execute(input);
 
-            response.status(201).json(output);
+            if(output.isLeft()){
+                response.status(output.value.statusCode).json({message :output.value.message});
+                return;
+            }
+
+            response.status(201).json(output.value);
         }
     }
 

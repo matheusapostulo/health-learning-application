@@ -1,3 +1,4 @@
+import { ResponseUnfavoriteModel } from './../../../../../application/usecase/UnfavoriteModel';
 import { InputUnfavoriteModelDto } from '../../../../../application/usecase/UnfavoriteModel';
 import Usecase from "../../../../../application/ports/Usecase";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
@@ -26,7 +27,12 @@ export default class UnfavoriteModelRoute implements Route {
             try {
                 const {userEmail, modelId} = request.params;
                 const input: InputUnfavoriteModelDto = {userEmail, modelId};
-                await this.UnfavoriteModelUseCase.execute(input);
+                const output: ResponseUnfavoriteModel = await this.UnfavoriteModelUseCase.execute(input);
+                
+                if(output.isLeft()){
+                    response.status(output.value.statusCode).json({message: output.value.message});
+                    return;
+                }
                 
                 response.status(200).json({message: 'Model unfavorited successfully'});
             } catch (error) {

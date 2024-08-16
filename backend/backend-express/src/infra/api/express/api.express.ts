@@ -13,7 +13,6 @@ export default class ApiExpress implements Api{
     }
 
     public static create(routes: Route[], jwtService: JwtService){
-        console.log(jwtService)
         return new ApiExpress(routes, jwtService);
     }
 
@@ -62,7 +61,7 @@ export default class ApiExpress implements Api{
         const isTokenValid = await this.jwtService.checkToken(token);
 
         if(!isTokenValid){
-            return res.status(401).json({message: "Erro: Token inválido."});
+            return res.status(401).json({message: "Error: Invalid Token."});
         }
 
         return next();

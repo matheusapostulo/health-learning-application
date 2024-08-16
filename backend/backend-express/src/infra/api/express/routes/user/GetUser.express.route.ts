@@ -1,5 +1,5 @@
 import Usecase from "../../../../../application/ports/Usecase";
-import { OutputGetUserDto } from "../../../../../application/usecase/GetUser";
+import { ResponseGetUser } from "../../../../../application/usecase/GetUser";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
@@ -25,9 +25,14 @@ export default class GetUserRoute implements Route {
         return async (request: Request, response: Response) => {
             const {email} = request.params;
 
-            const output: OutputGetUserDto = await this.GetUserUseCase.execute(email);
+            const output: ResponseGetUser = await this.GetUserUseCase.execute(email);
 
-            response.status(200).json(output);
+            if(output.isLeft()){
+                response.status(output.value.statusCode).json({message:output.value.message});
+                return;
+            }
+
+            response.status(200).json(output.value);
         }
     }
 

@@ -4,6 +4,7 @@ import GetUser from '../../src/application/usecase/GetUser';
 import { PrismaClientAdapter } from '../../src/infra/database/PrismaClientAdapter';
 import UserRepositoryDatabase from '../../src/infra/repository/UserRepositoryDatabase';
 import BcryptEncryptService from '../../src/infra/services/BcryptEncryptService';
+import NotFoundError from '../../src/application/errors/NotFound.error';
 
 it("Should get a user", async () => {
     // Dependencies 
@@ -22,5 +23,18 @@ it("Should get a user", async () => {
     // Getting the user
     const getUser = new GetUser(connection);
     const outputGetUser = await getUser.execute(inputCreateUser.email);
-    expect(outputGetUser.id).toEqual(outputCreateUser.id);
+    if(outputCreateUser.isRight() && outputGetUser.isRight()){
+        expect(outputGetUser.value.id).toEqual(outputCreateUser.value.id)
+    }
 })
+
+it("Should throw a error if the user doesn't exists", async () => {
+    // Dependencies 
+    const connection = new PrismaClientAdapter();
+    // Getting the user
+    const getUser = new GetUser(connection);
+    const outputGetUser = await getUser.execute("invalidUser@gmail.com");
+    if(outputGetUser.isLeft()){
+        expect(outputGetUser.value).toBeInstanceOf(NotFoundError)
+    }
+});

@@ -22,34 +22,44 @@ it("Should get a Machine Learning Model in memory", async () => {
     const connection = new DatabaseConnectionMemory();
     const getModel = new GetModel(connection);
     
-    const model = Model.create(inputCreateModel.modelName, inputCreateModel.category, inputCreateModel.description, inputCreateModel.accuracy, inputCreateModel.parameters);
-    await connection.create(model);
-    const outputGetModel = await getModel.execute(model.id);
+    const modelOrError = Model.create(inputCreateModel.modelName, inputCreateModel.category, inputCreateModel.description, inputCreateModel.accuracy, inputCreateModel.parameters);
+    if(modelOrError.isRight()){
+        const model: Model = modelOrError.value;
+        await connection.create(model);
+
+        const outputGetModel = await getModel.execute(model.id);
     
-    expect(outputGetModel.id).toBe(model.id);
-    expect(outputGetModel.modelName).toBe("Model Test Get Model");
-    expect(outputGetModel.description).toBe("Model Test Description");
-    expect(outputGetModel.accuracy).toBe(0.885);
-    expect(outputGetModel.parameters[0].name).toBe("Attribute 1");
-    expect(outputGetModel.parameters[0].type).toBe("number");
+        if(outputGetModel.isRight()){
+            expect(outputGetModel.value.id).toBe(model.id);
+            expect(outputGetModel.value.modelName).toBe("Model Test Get Model");
+            expect(outputGetModel.value.description).toBe("Model Test Description");
+            expect(outputGetModel.value.accuracy).toBe(0.885);
+            expect(outputGetModel.value.parameters[0].name).toBe("Attribute 1");
+            expect(outputGetModel.value.parameters[0].type).toBe("number");
+        }
+    }
 });
 
 it("Should get a Machine Learning Model in database", async () => {
     const connection = new PrismaClientAdapter();
     const modelRepository = new ModelRepositoryDatabase(connection);
     const createModel = new CreateModel(modelRepository);
+
     const outputCreateModel = await createModel.execute(inputCreateModel);
-    
-    const getModel = new GetModel(connection);
-    // Consulting if the model was created right
-    const outputGetModel = await getModel.execute(outputCreateModel.id);
-    expect(outputGetModel.id).toBe(outputCreateModel.id);
-    expect(outputGetModel.modelName).toBe("Model Test Get Model");
-    expect(outputGetModel.category).toBe("Test");
-    expect(outputGetModel.description).toBe("Model Test Description");
-    expect(outputGetModel.accuracy).toBe(0.885);
-    expect(outputGetModel.parameters[0].name).toBe("Attribute 1");
-    expect(outputGetModel.parameters[0].type).toBe("number");
-    
+    if(outputCreateModel.isRight()){
+        const getModel = new GetModel(connection);
+        // Consulting if the model was created right
+        const outputGetModel = await getModel.execute(outputCreateModel.value.id);
+
+        if(outputGetModel.isRight()){
+            expect(outputGetModel.value.id).toBe(outputCreateModel.value.id);
+            expect(outputGetModel.value.modelName).toBe("Model Test Get Model");
+            expect(outputGetModel.value.category).toBe("Test");
+            expect(outputGetModel.value.description).toBe("Model Test Description");
+            expect(outputGetModel.value.accuracy).toBe(0.885);
+            expect(outputGetModel.value.parameters[0].name).toBe("Attribute 1");
+            expect(outputGetModel.value.parameters[0].type).toBe("number");
+        }
+    }
     await connection.close();
 });

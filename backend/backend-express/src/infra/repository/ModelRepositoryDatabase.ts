@@ -14,9 +14,9 @@ export default class ModelRepositoryDatabase implements ModelRepository{
 
     async getModel(id: string): Promise<Model> {
         const model = await this.connection.findUnique(id, 'model');
-
+        // If the model doesn't exist, return model that is equal null
         if(!model){
-            throw new Error('Model not found');
+            return model;
         }
 
         // Here we'll abstract the database model to the domain model

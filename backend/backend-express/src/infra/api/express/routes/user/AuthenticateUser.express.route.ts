@@ -1,6 +1,5 @@
-import { InputAuthenticateUserDto } from './../../../../../application/usecase/AuthenticateUser';
+import { InputAuthenticateUserDto, ResponseAuthenticateUser } from './../../../../../application/usecase/AuthenticateUser';
 import Usecase from "../../../../../application/ports/Usecase";
-import { OutputAuthenticateUserDto } from "../../../../../application/usecase/AuthenticateUser";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
@@ -26,9 +25,14 @@ export default class AuthenticateUserRoute implements Route {
         return async (request: Request, response: Response) => {
             const input: InputAuthenticateUserDto = request.body;
 
-            const output: OutputAuthenticateUserDto = await this.AuthenticateUserUseCase.execute(input);
+            const output: ResponseAuthenticateUser = await this.AuthenticateUserUseCase.execute(input);
 
-            response.status(200).json(output);
+            if(output.isLeft()){
+                response.status(output.value.statusCode).json({message: output.value.message});
+                return;
+            }
+
+            response.status(200).json(output.value);
         }
     }
 

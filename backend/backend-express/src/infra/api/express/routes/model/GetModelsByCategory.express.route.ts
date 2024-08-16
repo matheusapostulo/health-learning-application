@@ -1,5 +1,5 @@
 import Usecase from "../../../../../application/ports/Usecase";
-import { OutputGetModelsByCategoryDto } from "../../../../../application/usecase/GetModelsByCategory";
+import { OutputGetModelsByCategoryDto, ResponseGetModelsByCategory } from "../../../../../application/usecase/GetModelsByCategory";
 import { Request, Response } from "express";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 
@@ -25,9 +25,14 @@ export default class GetModelsByCategoryRoute implements Route {
         return async (request: Request, response: Response) => {
             const {category} = request.params;
             
-            const output: OutputGetModelsByCategoryDto = await this.GetModelsByCategoryUseCase.execute(category);  
+            const output: ResponseGetModelsByCategory = await this.GetModelsByCategoryUseCase.execute(category);  
 
-            response.status(200).json(output);
+            if(output.isLeft()){
+                response.status(output.value.statusCode).json({message :output.value.message});
+                return;
+            }
+
+            response.status(200).json(output.value);
         };
     }
 

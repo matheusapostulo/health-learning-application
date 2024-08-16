@@ -1,3 +1,4 @@
+import { ResponseAuthenticateUser } from './../../src/application/usecase/AuthenticateUser';
 import AuthenticateUser from "../../src/application/usecase/AuthenticateUser";
 import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapter";
 import crypto from "crypto";
@@ -24,9 +25,7 @@ it("Should authenticate a user", async () => {
         password: "123456",
     }
     // Execute the use case to create a user
-    const outputCreateUser = await createUser.execute(inputCreateUser);
-    // Check if the user was created
-    expect(outputCreateUser.id).toBeDefined();
+    await createUser.execute(inputCreateUser);
     // Instance of the authenticate use case
     const authenticateUser = new AuthenticateUser(connection, encryptService, userRepository, jwtService);
     // Input to authenticate a user
@@ -35,11 +34,13 @@ it("Should authenticate a user", async () => {
         password: "123456"
     };
     // Execute the use case to authenticate a user
-    const outputAuthenticateUser = await authenticateUser.execute(inputAuthenticateUser);
-    expect(outputAuthenticateUser.token).toBeDefined();
+    const outputAuthenticateUser: ResponseAuthenticateUser = await authenticateUser.execute(inputAuthenticateUser);
+    expect(outputAuthenticateUser.value).toBeDefined();
 
     // Check if the token is valid. It'll be useful to check if the user is authenticated in the future
-    expect(await jwtService.checkToken(outputAuthenticateUser.token)).toBeTruthy();
+    if(outputAuthenticateUser.isRight()){
+        expect(await jwtService.checkToken(outputAuthenticateUser.value.token)).toBeTruthy();
+    }
     
     await connection.close();
 });

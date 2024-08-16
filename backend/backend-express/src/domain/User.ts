@@ -1,5 +1,8 @@
 import crypto from 'crypto';
 import EncryptService from '../application/ports/EncryptService';
+import { Either, left, right } from '../application/errors/either';
+import { AuthenticateUserError } from '../application/errors/AuthenticateUser.error';
+import RequiredParametersError from '../application/errors/RequiredParameters.error';
 
 export default class User {
     
@@ -10,20 +13,21 @@ export default class User {
         private email: string, 
         private password: string, 
         private favoritedModels: string[],
-    ){ 
-        if(!id) throw new Error("Id is required");
-        if(!name) throw new Error("Name is required");
-        if(!lastName) throw new Error("LastName is required");
-        if(!email) throw new Error("Email is required");
-    }
+    ){ }
     
-    static async create(name: string, lastName: string, email: string, password: string, encryptService: EncryptService) {
+    static async create(name: string, lastName: string, email: string, password: string, encryptService: EncryptService) : Promise<ResponseCreateUserDomain> {
+        // Validating required parameters
+        if(!name) return left(new RequiredParametersError("Name"));
+        if(!lastName) return left(new RequiredParametersError("Last name"));
+        if(!email) return left(new RequiredParametersError("Email"));
+        if(!password) return left(new RequiredParametersError("Password"));
+        
+        // Creating a new user
         const id = crypto.randomUUID();
         const favoritedModels: string[] = [];
         // Generating a encrypted password
-        if(!password) throw new Error("Password is required");
         const encryptedPassword = await encryptService.encrypt(password);
-        return new User(id, name, lastName, email, encryptedPassword, favoritedModels);
+        return right(new User(id, name, lastName, email, encryptedPassword, favoritedModels));
     }
 
     getName() {
@@ -70,9 +74,15 @@ export default class User {
         this.favoritedModels = this.favoritedModels.filter(model => model !== id);
     }
 
-    async validatePassword(password: string, encryptService: EncryptService) {
+    async validatePassword(password: string, encryptService: EncryptService): Promise<Either<AuthenticateUserError.InvalidPasswordError, true>> {
         const valid = await encryptService.compare(password, this.password);
-        if(!valid) throw new Error("Invalid password");
-        return valid;
+        if(!valid) return left(new AuthenticateUserError.InvalidPasswordError());
+        return right(valid);
     }
 }
+
+type ResponseCreateUserDomain = Either<
+    RequiredParametersError
+    ,
+    User
+>;

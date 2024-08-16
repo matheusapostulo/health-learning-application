@@ -1,5 +1,5 @@
 import Usecase from "../../../../../application/ports/Usecase";
-import { OutputGetModelDto } from "../../../../../application/usecase/GetModel";
+import { ResponseGetModel } from "../../../../../application/usecase/GetModel";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
 
@@ -25,9 +25,14 @@ export default class GetModelRoute implements Route {
         return async (request: Request, response: Response) => {
             const {id} = request.params;
 
-            const output: OutputGetModelDto = await this.GetModelUseCase.execute(id);
+            const output: ResponseGetModel = await this.GetModelUseCase.execute(id);
 
-            response.status(200).json(output);
+            if(output.isLeft()){
+                response.status(output.value.statusCode).json({message :output.value.message});
+                return;
+            }
+
+            response.status(200).json(output.value);
         }
     }
 

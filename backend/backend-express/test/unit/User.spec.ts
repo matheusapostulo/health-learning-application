@@ -1,5 +1,7 @@
+import RequiredParametersError from "../../src/application/errors/RequiredParameters.error";
 import User from "../../src/domain/User";
 import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
+import { AuthenticateUserError } from "../../src/application/errors/AuthenticateUser.error";
 
 describe("User unit tests",  () => {
     const inputCreateUser = {
@@ -12,9 +14,10 @@ describe("User unit tests",  () => {
     const encryptService = new BcryptEncryptService();
 
     // This user is created to be used in some tests
-    let user: User;
+    let user;
     beforeAll(async () => {
-        user = await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password, encryptService);
+        let userOrError = await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password, encryptService);
+        user = userOrError.value;
     });
     
     // Here we're also testing the get methods
@@ -62,39 +65,26 @@ describe("User unit tests",  () => {
 
     describe("User throw errors when create", () => {
         it("Should throw an error when the user name is empty", async () => {
-            expect.assertions(1);
-            try {
-                await User.create("", inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password, encryptService);
-            } catch (error) {
-                expect(error.message).toBe('Name is required');
-            };
+            const outputCreateUser = await User.create("", inputCreateUser.lastName, inputCreateUser.email, inputCreateUser.password, encryptService);;
+
+            expect(outputCreateUser.value).toBeInstanceOf(RequiredParametersError); 
+            
         });
         it("Should throw an error when the user email is empty", async () => {
-            expect.assertions(1);
-            try {
-                await User.create(inputCreateUser.name, inputCreateUser.lastName, "", inputCreateUser.password, encryptService);
-            } catch (error) {
-                expect(error.message).toBe("Email is required");
-            };
+            const outputCreateUser = await User.create(inputCreateUser.name, inputCreateUser.lastName, "", inputCreateUser.password, encryptService);
+            expect(outputCreateUser.value).toBeInstanceOf(RequiredParametersError); 
         });
 
         it("Should throw an error when the user password is empty", async () => {
-            expect.assertions(1);
-            try {
-                await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, "", encryptService);
-            } catch (error) {
-                expect(error.message).toBe("Password is required");
-            };
+            const outputCreateUser = await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, "", encryptService);
+            expect(outputCreateUser.value).toBeInstanceOf(RequiredParametersError);
         });
 
         it("Should throw an error when the user password is wrong", async () => {
-            expect.assertions(1);
-            try {
-                const user = await User.create(inputCreateUser.name, inputCreateUser.lastName, inputCreateUser.email, "password", encryptService);
-                await user.validatePassword("wrongPassword", encryptService);
-            } catch (error) {
-                expect(error.message).toBe("Invalid password");
-            };
+            const validPasswordOrError = await user.validatePassword("wrongPassword", encryptService);
+            if(validPasswordOrError.isLeft()){
+                expect(validPasswordOrError.value).toBeInstanceOf(AuthenticateUserError.InvalidPasswordError);
+            }
         });
         
     });

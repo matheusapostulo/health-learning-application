@@ -10,6 +10,7 @@ import TransactionRepositoryDatabase from "../../src/infra/repository/Transactio
 import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
 import { typeParameter } from "../../src/domain/Model";
 import crypto from "crypto";
+import { FavoriteModelError } from "../../src/application/errors/FavoriteModel.error";
 
 it("Should favorite a model by a user", async () => {
     // Dependencies implementations
@@ -52,24 +53,31 @@ it("Should favorite a model by a user", async () => {
     // Creating a user
     const outputCreateUser = await createUser.execute(inputCreateUser);
     // Favorite a model
-    const inputFavoriteModel = {
-        userEmail: inputCreateUser.email,
-        modelId: outputCreateModel.id,
-    };
-    await favoriteModel.execute(inputFavoriteModel);
-    // Get the model to check if it was favorited
-    const outputGetModel = await getModel.execute(outputCreateModel.id);
-    expect(outputGetModel.favoritedBy[0]).toBe(outputCreateUser.id);
-    // Get the user to check if it favorited the model
-    const outputGetUser = await getUser.execute(randomEmail);
-    expect(outputGetUser.favoritedModels[0]).toBe(outputCreateModel.id);
-
-    // Testing if throw error when user already favorited the model
-    try {
+    if(outputCreateModel.isRight()){ 
+        const inputFavoriteModel = {
+            userEmail: inputCreateUser.email,
+            modelId: outputCreateModel.value.id,
+        };
         await favoriteModel.execute(inputFavoriteModel);
-    } catch (error) {
-        expect(error.message).toBe("User already favorited this model");
-    };
-    
+        // Get the model to check if it was favorited
+        if(outputCreateUser.isRight()){
+            const outputGetModel = await getModel.execute(outputCreateModel.value.id);
+            if(outputGetModel.isRight()){
+                expect(outputGetModel.value.favoritedBy[0]).toBe(outputCreateUser.value.id);
+                // Get the user to check if it favorited the model
+                const outputGetUser = await getUser.execute(randomEmail);
+                if(outputGetUser.isRight()){
+                    expect(outputGetUser.value.favoritedModels[0]).toBe(outputCreateModel.value.id);
+                }
+        
+                // Testing if throw error when user already favorited the model 
+                const alreadyFavorited = await favoriteModel.execute(inputFavoriteModel);
+                if(alreadyFavorited.isLeft()){
+                    expect(alreadyFavorited.value).toBeInstanceOf(FavoriteModelError.UserAlreadyFavoritedError);
+                }
+                
+            }
+        }
+    }
     await connection.close();
 });

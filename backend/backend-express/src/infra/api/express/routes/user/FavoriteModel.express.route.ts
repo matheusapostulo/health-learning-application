@@ -1,4 +1,4 @@
-import { InputFavoriteModelDto } from './../../../../../application/usecase/FavoriteModel';
+import { InputFavoriteModelDto, ResponseFavoriteModel } from './../../../../../application/usecase/FavoriteModel';
 import Usecase from "../../../../../application/ports/Usecase";
 import Route, { HttpMethod, RequiresAuthentication } from "../Route";
 import { Request, Response } from "express";
@@ -26,8 +26,11 @@ export default class FavoriteModelRoute implements Route {
             try {
                 const {userEmail, modelId} = request.params;
                 const input: InputFavoriteModelDto = {userEmail, modelId};
-                await this.FavoriteModelUseCase.execute(input);
-                
+                const output: ResponseFavoriteModel = await this.FavoriteModelUseCase.execute(input);
+                if(output.isLeft()){
+                    response.status(output.value.statusCode).json({message: output.value.message});
+                    return;
+                }
                 response.status(200).json({message: 'Model favorited successfully'});
             } catch (error) {
                 console.log(error)

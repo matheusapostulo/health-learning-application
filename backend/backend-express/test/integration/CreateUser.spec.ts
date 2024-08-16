@@ -1,4 +1,5 @@
-import CreateUser from "../../src/application/usecase/CreateUser";
+import { CreateUserError } from "../../src/application/errors/CreateUser.error";
+import CreateUser, { ResponseCreateUser } from "../../src/application/usecase/CreateUser";
 import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapter";
 import UserRepositoryDatabase from "../../src/infra/repository/UserRepositoryDatabase";
 import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
@@ -19,19 +20,20 @@ const encryptService = new BcryptEncryptService();
 it("Should create a User in database", async () => {
     const createUser = new CreateUser(userRepository, encryptService, connection);
 
-    const outputCreateUser = await createUser.execute(inputCreateUser);
+    const outputCreateUser: ResponseCreateUser = await createUser.execute(inputCreateUser);
 
-    expect(outputCreateUser.id).toBeDefined();
+    if (outputCreateUser.isRight()) {
+        expect(outputCreateUser.value.id).toBeDefined();
+    }
 
-    connection.close();
+    await connection.close();
 })
 
 it("Shouldn't create a user if the email already exists ", async () => { 
-    const createUser = new CreateUser(userRepository, encryptService, connection);
-    expect.assertions(1);
-    try {
-        await createUser.execute(inputCreateUser);
-    } catch (error) {
-        expect(error.message).toBe('User already exists');
-    };
+    const createUser = new CreateUser(userRepository, encryptService, connection); 
+    await createUser.execute(inputCreateUser);
+    const outputCreateUser: ResponseCreateUser = await createUser.execute(inputCreateUser);
+
+    expect(outputCreateUser.value).toBeInstanceOf(CreateUserError.UserAlreadyExistsError);
+    
 });

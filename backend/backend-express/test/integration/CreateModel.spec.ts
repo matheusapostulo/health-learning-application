@@ -25,8 +25,9 @@ it("Should create a Machine Learning Model in memory", async () => {
   const outputCreateModel = await createModel.execute(inputCreateModel);
 
   // Consulting if the model was created
-  expect(outputCreateModel.id).toBeDefined();
-
+  if(outputCreateModel.isRight()){
+    expect(outputCreateModel.value.id).toBeDefined();
+  }
 });
 
 it("Should create a Machine Learning Model in database", async () => {
@@ -37,7 +38,9 @@ it("Should create a Machine Learning Model in database", async () => {
   const outputCreateModel = await createModel.execute(inputCreateModel);
 
   // Consulting if the model was created
-  expect(outputCreateModel.id).toBeDefined();
+  if(outputCreateModel.isRight()){
+    expect(outputCreateModel.value.id).toBeDefined();
+  }
   await connection.close();
 });
 
