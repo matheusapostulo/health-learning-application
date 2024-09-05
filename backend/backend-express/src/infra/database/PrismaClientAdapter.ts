@@ -40,7 +40,7 @@ export class PrismaClientAdapter implements DatabaseConnection{
             case 'user':
                 return this.connection.user.findUnique({
                     where: {
-                        email: paramToFind,
+                        id: paramToFind,
                     },
                 });
         }
@@ -56,10 +56,6 @@ export class PrismaClientAdapter implements DatabaseConnection{
 
     async transaction(): Promise<void> {
         this.connection.transaction();
-    }
-
-    async close(): Promise<void> {
-        this.connection.$disconnect(); 
     }
 
     async favoriteUnfavoriteModelTransaction(user: User, model: Model): Promise<void> {
@@ -82,6 +78,34 @@ export class PrismaClientAdapter implements DatabaseConnection{
                 }
             })
         ]);
+    }
+
+    async findUserByEmail(email: string): Promise<any> {
+        return this.connection.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+    }
+
+    async updateUser(user: User): Promise<void> {
+        return await this.connection.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                name: user.getName(),
+                lastName: user.getLastName(),
+                email: user.getEmail(),
+                password: user.getPassword(),
+                favoritedModels: user.getFavoriteModels(),
+                predictions: user.getPredictions()
+            }
+        });
+    }
+
+    async close(): Promise<void> {
+        this.connection.$disconnect(); 
     }
 
     private getEntityName<T>(entity: T): string {

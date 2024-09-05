@@ -6,5 +6,7 @@ export default interface DatabaseConnection{
     findUnique(paramToFind: string, entity: string): Promise<any>;
     findModelByCategory(category: string): Promise<any>;
     favoriteUnfavoriteModelTransaction(user: User, model: Model): Promise<void>;
+    findUserByEmail(email: string): Promise<any>;
+    updateUser(user: User): Promise<void>;
     close(): Promise<void>;
 }

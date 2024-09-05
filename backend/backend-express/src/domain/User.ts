@@ -13,6 +13,7 @@ export default class User {
         private email: string, 
         private password: string, 
         private favoritedModels: string[],
+        private predictions: Predictions[]
     ){ }
     
     static async create(name: string, lastName: string, email: string, password: string, encryptService: EncryptService) : Promise<ResponseCreateUserDomain> {
@@ -25,9 +26,10 @@ export default class User {
         // Creating a new user
         const id = crypto.randomUUID();
         const favoritedModels: string[] = [];
+        const predictions: Predictions[] = [];
         // Generating a encrypted password
         const encryptedPassword = await encryptService.encrypt(password);
-        return right(new User(id, name, lastName, email, encryptedPassword, favoritedModels));
+        return right(new User(id, name, lastName, email, encryptedPassword, favoritedModels, predictions));
     }
 
     getName() {
@@ -74,11 +76,29 @@ export default class User {
         this.favoritedModels = this.favoritedModels.filter(model => model !== id);
     }
 
+    getPredictions() {
+        return this.predictions;
+    }
+
+    addPrediction(modelId: string, predictionResult: string) {
+        this.predictions.push({
+            modelId,
+            predictionResult,
+            createdAt: new Date()
+        });
+    }
+
     async validatePassword(password: string, encryptService: EncryptService): Promise<Either<AuthenticateUserError.InvalidPasswordError, true>> {
         const valid = await encryptService.compare(password, this.password);
         if(!valid) return left(new AuthenticateUserError.InvalidPasswordError());
         return right(valid);
     }
+}
+
+export type Predictions = {
+    modelId: string,
+    predictionResult: string
+    createdAt: Date
 }
 
 type ResponseCreateUserDomain = Either<

@@ -34,6 +34,14 @@ describe("User unit tests",  () => {
             user.addFavoriteModel("model1");
             expect(user.getFavoriteModels()).toStrictEqual(["model1"]);
         })
+
+        it("Should add a prediction to user", () => {
+            user.addPrediction("model1", "prediction1");
+            let userPredictionModelId = user.getPredictions()[0]['modelId'];
+            let userPredictionPrediction = user.getPredictions()[0]['predictionResult'];
+            expect(userPredictionModelId).toBe("model1");
+            expect(userPredictionPrediction).toBe("prediction1");
+        });
     });
 
     describe("User remove tests", () => {
