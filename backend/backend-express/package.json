@@ -15,10 +15,10 @@
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
-    "prisma": "^5.17.0"
+    "prisma": "^5.19.1"
   },
   "devDependencies": {
-    "@prisma/client": "^5.17.0",
+    "@prisma/client": "^5.19.1",
     "@swc/core": "^1.7.0",
     "@swc/jest": "^0.2.36",
     "@types/bcrypt": "^5.0.2",
