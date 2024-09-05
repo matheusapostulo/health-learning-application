@@ -27,7 +27,7 @@ export default class DatabaseConnectionMemory implements DatabaseConnection {
             case 'model':
                 return this.models.find(model => model.id === paramToFind);
             case 'user':
-                return this.users.find(user => user.getEmail() === paramToFind);
+                return this.users.find(user => user.id === paramToFind);
         }
     } 
     
@@ -38,6 +38,15 @@ export default class DatabaseConnectionMemory implements DatabaseConnection {
 
     async favoriteUnfavoriteModelTransaction(user: User, model: Model): Promise<void> {
         return Promise.resolve();
+    }
+
+    async findUserByEmail(email: string): Promise<any> {
+        return this.users.find(user => user.getEmail() === email);
+    }
+
+    async updateUser(user: User): Promise<void> {
+        const userIndex = this.users.findIndex(u => u.id === user.id);
+        this.users[userIndex] = user;
     }
 
     async close(): Promise<void> {

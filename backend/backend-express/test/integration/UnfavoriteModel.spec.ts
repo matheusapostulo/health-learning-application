@@ -55,9 +55,9 @@ it("Should unfavorite a model by a user", async () => {
     const outputCreateUser = await createUser.execute(inputCreateUser);
 
     // Favorite a model
-    if(outputCreateModel.isRight()){
+    if(outputCreateModel.isRight() && outputCreateUser.isRight()){
         const inputFavoriteModel = {
-            userEmail: inputCreateUser.email,
+            userId: outputCreateUser.value.id,
             modelId: outputCreateModel.value.id,
         };
     

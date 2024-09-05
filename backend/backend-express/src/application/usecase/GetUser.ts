@@ -6,11 +6,11 @@ import DatabaseConnection from "../ports/database/DatabaseConnection";
 export default class GetUser {
     constructor(readonly connection: DatabaseConnection) {
     }
-    async execute(email: string): Promise<ResponseGetUser> {
+    async execute(userId: string): Promise<ResponseGetUser> {
         try {
-            const user = await this.connection.findUnique(email, 'user');
+            const user = await this.connection.findUnique(userId, 'user');
             if(!user){
-                return left(new NotFoundError(email));
+                return left(new NotFoundError(userId));
             }
             return right({
                 id: user.id,

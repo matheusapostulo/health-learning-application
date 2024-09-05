@@ -17,7 +17,7 @@ export default class CreateUser {
 
     async execute(input: InputCreateUserDto): Promise<ResponseCreateUser> {
         try {
-            const userExists = await this.connection.findUnique(input.email, 'user');
+            const userExists = await this.connection.findUserByEmail(input.email);
             // Should'n create a user if it already exists
             if(userExists){
                 return left(new CreateUserError.UserAlreadyExistsError(input.email));

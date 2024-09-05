@@ -25,21 +25,24 @@ it("Should authenticate a user", async () => {
         password: "123456",
     }
     // Execute the use case to create a user
-    await createUser.execute(inputCreateUser);
+    const outputCreateUser = await createUser.execute(inputCreateUser);
     // Instance of the authenticate use case
     const authenticateUser = new AuthenticateUser(connection, encryptService, userRepository, jwtService);
     // Input to authenticate a user
-    const inputAuthenticateUser = {
-        email: randomEmail,
-        password: "123456"
-    };
-    // Execute the use case to authenticate a user
-    const outputAuthenticateUser: ResponseAuthenticateUser = await authenticateUser.execute(inputAuthenticateUser);
-    expect(outputAuthenticateUser.value).toBeDefined();
+    if(outputCreateUser.isRight()){
+        const inputAuthenticateUser = {
+            userId: outputCreateUser.value.id,
+            password: "123456"
+        };
+    
+        // Execute the use case to authenticate a user
+        const outputAuthenticateUser: ResponseAuthenticateUser = await authenticateUser.execute(inputAuthenticateUser);
+        expect(outputAuthenticateUser.value).toBeDefined();
 
-    // Check if the token is valid. It'll be useful to check if the user is authenticated in the future
-    if(outputAuthenticateUser.isRight()){
-        expect(await jwtService.checkToken(outputAuthenticateUser.value.token)).toBeTruthy();
+        // Check if the token is valid. It'll be useful to check if the user is authenticated in the future
+        if(outputAuthenticateUser.isRight()){
+            expect(await jwtService.checkToken(outputAuthenticateUser.value.token)).toBeTruthy();
+        }
     }
     
     await connection.close();

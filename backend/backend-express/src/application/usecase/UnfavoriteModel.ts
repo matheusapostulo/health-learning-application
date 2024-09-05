@@ -17,9 +17,9 @@ export default class UnfavoriteModel {
     async execute(input: InputUnfavoriteModelDto): Promise<ResponseUnfavoriteModel>{
         try {
             // Obtaining the user as domain to make mutation
-            const user = await this.userRepository.getUser(input.userEmail);
+            const user = await this.userRepository.getUser(input.userId);
             if(!user) {
-                return left(new NotFoundError(input.userEmail));
+                return left(new NotFoundError(input.userId));
             }
             // Obtaining the model as domain to make mutation
             const model = await this.modelRepository.getModel(input.modelId);
@@ -44,7 +44,7 @@ export default class UnfavoriteModel {
 }
 
 export interface InputUnfavoriteModelDto{
-    userEmail: string;
+    userId: string;
     modelId: string;
 }
 

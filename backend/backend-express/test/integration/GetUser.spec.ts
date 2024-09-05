@@ -22,9 +22,11 @@ it("Should get a user", async () => {
     const outputCreateUser = await createUser.execute(inputCreateUser);
     // Getting the user
     const getUser = new GetUser(connection);
-    const outputGetUser = await getUser.execute(inputCreateUser.email);
-    if(outputCreateUser.isRight() && outputGetUser.isRight()){
-        expect(outputGetUser.value.id).toEqual(outputCreateUser.value.id)
+    if(outputCreateUser.isRight()){
+        const outputGetUser = await getUser.execute(outputCreateUser.value.id);
+        if(outputCreateUser.isRight() && outputGetUser.isRight()){
+            expect(outputGetUser.value.id).toEqual(outputCreateUser.value.id)
+        }
     }
 })
 
@@ -33,7 +35,7 @@ it("Should throw a error if the user doesn't exists", async () => {
     const connection = new PrismaClientAdapter();
     // Getting the user
     const getUser = new GetUser(connection);
-    const outputGetUser = await getUser.execute("invalidUser@gmail.com");
+    const outputGetUser = await getUser.execute("invalid_id");
     if(outputGetUser.isLeft()){
         expect(outputGetUser.value).toBeInstanceOf(NotFoundError)
     }

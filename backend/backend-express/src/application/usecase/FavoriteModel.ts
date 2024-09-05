@@ -1,4 +1,3 @@
-import { Response } from 'express';
 import ModelRepository from "../repository/ModelRepository";
 import TransactionRepository from "../repository/TransactionRepository";
 import UserRepository from "../repository/UserRepository";
@@ -18,9 +17,9 @@ export default class FavoriteModel {
     async execute(input: InputFavoriteModelDto): Promise<ResponseFavoriteModel> {
         try {
             // Obtaining the user as domain to make mutation
-            const user = await this.userRepository.getUser(input.userEmail);
+            const user = await this.userRepository.getUser(input.userId);
             if(!user) {
-                return left(new NotFoundError(input.userEmail));
+                return left(new NotFoundError(input.userId));
             }
             // Obtaining the model as domain to make mutation
             const model = await this.modelRepository.getModel(input.modelId);
@@ -46,7 +45,7 @@ export default class FavoriteModel {
 }
 
 export interface InputFavoriteModelDto {
-    userEmail: string,
+    userId: string,
     modelId: string
 }
 
