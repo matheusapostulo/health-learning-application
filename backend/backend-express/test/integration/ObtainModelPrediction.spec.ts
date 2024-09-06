@@ -17,7 +17,6 @@ it("Should obtain model prediction", async () => {
     const userRepository = new UserRepositoryDatabase(connection);
     const modelRepository = new ModelRepositoryDatabase(connection);
     const encryptService = new BcryptEncryptService();
-    const getModel = new GetModel(connection);
     const getUser = new GetUser(connection);
     const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("testeAPI");
     // Instance of other required use cases

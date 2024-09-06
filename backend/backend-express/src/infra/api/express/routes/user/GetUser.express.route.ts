@@ -23,9 +23,9 @@ export default class GetUserRoute implements Route {
 
     public getHandler() {
         return async (request: Request, response: Response) => {
-            const {email} = request.params;
+            const {id} = request.params;
 
-            const output: ResponseGetUser = await this.GetUserUseCase.execute(email);
+            const output: ResponseGetUser = await this.GetUserUseCase.execute(id);
 
             if(output.isLeft()){
                 response.status(output.value.statusCode).json({message:output.value.message});
