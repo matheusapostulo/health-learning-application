@@ -1,0 +1,9 @@
+services:
+  backend-fastapi:
+    build: .
+    container_name: backend-fastapi
+    ports:
+      - '4000:4000'
+    environment:
+      PORT: 4000
+    

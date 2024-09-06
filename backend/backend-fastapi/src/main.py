@@ -18,5 +18,5 @@ def predict_lung_cancer(data: LungCancerDTO):
         "prediction": predicition
     }
 
-if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=4000)
+# if __name__ == '__main__':
+#     uvicorn.run(app, host='127.0.0.1', port=4000)
