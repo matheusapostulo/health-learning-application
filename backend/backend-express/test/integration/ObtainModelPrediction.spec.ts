@@ -19,7 +19,7 @@ it("Should obtain model prediction", async () => {
     const encryptService = new BcryptEncryptService();
     const getModel = new GetModel(connection);
     const getUser = new GetUser(connection);
-    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy();
+    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("testeAPI");
     // Instance of other required use cases
     const createUser = new CreateUser(userRepository, encryptService, connection);
     const createModel = new CreateModel(modelRepository);
@@ -121,6 +121,10 @@ it("Should obtain model prediction", async () => {
         }
         const outputObtainModelPrediction = await obtainModelPrediction.execute(inputObtainModelPrediction);
         expect(outputObtainModelPrediction.isRight()).toBeTruthy();
+        if(outputObtainModelPrediction.isRight()){
+            let getUserOutput = await getUser.execute(outputCreateUser.value.id);
+            expect(getUserOutput.value.predictions[0].modelId).toBe(outputCreateModel.value.id);
+        }
     }    
 
     await connection.close();

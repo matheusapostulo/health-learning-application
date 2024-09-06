@@ -1,3 +1,4 @@
+import { Predictions } from "../../domain/User";
 import { AppError } from "../errors/AppError.error";
 import { Either, left, right } from "../errors/either";
 import NotFoundError from "../errors/NotFound.error";
@@ -18,6 +19,7 @@ export default class GetUser {
                 lastName: user.lastName,
                 email: user.email,
                 favoritedModels: user.favoritedModels,
+                predictions: user.predictions
             });
         } catch (error) {
             return left(new AppError.UnexpectedError());
@@ -32,6 +34,7 @@ export interface OutputGetUserDto {
     lastName: string;
     email: string;
     favoritedModels: string[];
+    predictions: Predictions[];
 }   
 
 export type ResponseGetUser = Either<

@@ -1,6 +1,7 @@
 {
   "name": "backend-express",
   "version": "1.0.0",
+  "types": "modules",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,10 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
+    "node-fetch": "^3.3.2",
     "prisma": "^5.19.1"
   },
   "devDependencies": {
