@@ -6,4 +6,6 @@ services:
       - '4000:4000'
     environment:
       PORT: 4000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     
