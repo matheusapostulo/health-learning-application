@@ -22,11 +22,11 @@ it("Should create a User in database", async () => {
 
     const outputCreateUser: ResponseCreateUser = await createUser.execute(inputCreateUser);
 
+    await connection.close();
+
     if (outputCreateUser.isRight()) {
         expect(outputCreateUser.value.id).toBeDefined();
     }
-
-    await connection.close();
 })
 
 it("Shouldn't create a user if the email already exists ", async () => { 

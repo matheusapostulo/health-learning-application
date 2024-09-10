@@ -34,16 +34,17 @@ it("Should authenticate a user", async () => {
             userId: outputCreateUser.value.id,
             password: "123456"
         };
-    
+        
         // Execute the use case to authenticate a user
         const outputAuthenticateUser: ResponseAuthenticateUser = await authenticateUser.execute(inputAuthenticateUser);
         expect(outputAuthenticateUser.value).toBeDefined();
-
+        
+        // Close the connection after database operations
+        await connection.close();
+        
         // Check if the token is valid. It'll be useful to check if the user is authenticated in the future
         if(outputAuthenticateUser.isRight()){
             expect(await jwtService.checkToken(outputAuthenticateUser.value.token)).toBeTruthy();
         }
     }
-    
-    await connection.close();
 });

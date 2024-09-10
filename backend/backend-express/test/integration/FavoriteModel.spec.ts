@@ -53,6 +53,9 @@ it("Should favorite a model by a user", async () => {
     // Creating a user
     const outputCreateUser = await createUser.execute(inputCreateUser);
     // Favorite a model
+    if(outputCreateModel.isLeft() || outputCreateUser.isLeft()){
+        await connection.close();
+    }
     if(outputCreateModel.isRight() && outputCreateUser.isRight()){ 
         const inputFavoriteModel = {
             userId: outputCreateUser.value.id,

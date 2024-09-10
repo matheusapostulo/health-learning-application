@@ -51,6 +51,8 @@ it("Should get a Machine Learning Model in database", async () => {
         // Consulting if the model was created right
         const outputGetModel = await getModel.execute(outputCreateModel.value.id);
 
+        await connection.close();
+        
         if(outputGetModel.isRight()){
             expect(outputGetModel.value.id).toBe(outputCreateModel.value.id);
             expect(outputGetModel.value.modelName).toBe("Model Test Get Model");
@@ -61,5 +63,4 @@ it("Should get a Machine Learning Model in database", async () => {
             expect(outputGetModel.value.parameters[0].type).toBe("number");
         }
     }
-    await connection.close();
 });

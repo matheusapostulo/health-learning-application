@@ -37,10 +37,12 @@ it("Should create a Machine Learning Model in database", async () => {
 
   const outputCreateModel = await createModel.execute(inputCreateModel);
 
+  // Close the connection after database operations
+  await connection.close();
+
   // Consulting if the model was created
   if(outputCreateModel.isRight()){
     expect(outputCreateModel.value.id).toBeDefined();
   }
-  await connection.close();
 });
 
