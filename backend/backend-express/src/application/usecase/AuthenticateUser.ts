@@ -19,9 +19,7 @@ export default class AuthenticateUser {
     async execute(input: InputAuthenticateUserDto): Promise<ResponseAuthenticateUser> {
         try {
             // Checking if the user exists and obtaining the user
-            console.log("User email:", input.userEmail)
             const user = await this.userRepository.getUserByEmail(input.userEmail);
-            console.log("User:", user)
             if(!user){
                 return left(new NotFoundError(input.userEmail));
             }
