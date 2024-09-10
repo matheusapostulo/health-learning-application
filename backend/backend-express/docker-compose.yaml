@@ -1,14 +1,14 @@
 services:
-  backend-express:
+  app:
     build:
       context: .
       target: build
+    restart: always
     volumes:
-      - ./:/app
-      - /app/node_modules
+      - .:/home/node/app
     ports:
       - 3000:3000
-    command: npm run start
+
   mongo:
     build: ./mongodb_rs
     restart: always

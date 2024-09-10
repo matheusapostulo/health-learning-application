@@ -1,15 +1,23 @@
-FROM node:16-alpine AS build
+FROM node:20-slim AS build
+
+RUN apt update && apt install -y openssl procps iputils-ping
+
+USER node
+
+RUN mkdir /home/node/app
 
 WORKDIR /home/node/app
 
-RUN npm config set cache /home/node/app/.npm-cache --global
+CMD ["/home/node/app/.docker/start-dev.sh"]
 
-COPY package*.json .
+# RUN npm config set cache /home/node/app/.npm-cache --global
 
-RUN npm install
+# COPY package*.json .
 
-COPY . .
+# RUN npm install
 
-RUN npx prisma generate
+# COPY . .
 
-CMD tail -f /dev/null
+# RUN npx prisma generate
+
+# CMD tail -f /dev/null
