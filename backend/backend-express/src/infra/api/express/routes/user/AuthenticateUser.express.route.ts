@@ -25,6 +25,8 @@ export default class AuthenticateUserRoute implements Route {
         return async (request: Request, response: Response) => {
             const input: InputAuthenticateUserDto = request.body;
 
+            console.log(input);
+
             const output: ResponseAuthenticateUser = await this.AuthenticateUserUseCase.execute(input);
 
             if(output.isLeft()){

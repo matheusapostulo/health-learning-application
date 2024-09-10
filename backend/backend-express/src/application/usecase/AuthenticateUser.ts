@@ -19,9 +19,11 @@ export default class AuthenticateUser {
     async execute(input: InputAuthenticateUserDto): Promise<ResponseAuthenticateUser> {
         try {
             // Checking if the user exists and obtaining the user
-            const user = await this.userRepository.getUser(input.userId);
+            console.log("User email:", input.userEmail)
+            const user = await this.userRepository.getUserByEmail(input.userEmail);
+            console.log("User:", user)
             if(!user){
-                return left(new NotFoundError(input.userId));
+                return left(new NotFoundError(input.userEmail));
             }
             // Checking if the password is correct
             const validPasswordOrError = await user.validatePassword(input.password, this.encryptService);
@@ -36,14 +38,13 @@ export default class AuthenticateUser {
             });
             
         } catch (error) {
-            console.log(error)
             return left(new AppError.UnexpectedError());
         }     
     }
 }
 
 export interface InputAuthenticateUserDto {
-    userId: string,
+    userEmail: string,
     password: string,
 }
 

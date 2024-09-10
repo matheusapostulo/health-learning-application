@@ -9,9 +9,19 @@ export default class UserRepositoryDatabase implements UserRepository {
         await this.connection.create(user);
     }
 
-    async getUser(userId: string): Promise<User> {
+    async getUser(userId: string): Promise<User>{
         // Checking if the user exists
         const user = await this.connection.findUnique(userId, 'user');
+        // If the user doesn't exist, return user that is equal null
+        if(!user){
+            return user;
+        }
+        return new User(user.id, user.name, user.lastName, user.email, user.password, user.favoritedModels, user.predictions);
+    }
+
+    async getUserByEmail(email: string): Promise<User>{
+        // Checking if the user exists
+        const user = await this.connection.findUserByEmail(email);
         // If the user doesn't exist, return user that is equal null
         if(!user){
             return user;

@@ -31,13 +31,14 @@ it("Should authenticate a user", async () => {
     // Input to authenticate a user
     if(outputCreateUser.isRight()){
         const inputAuthenticateUser = {
-            userId: outputCreateUser.value.id,
+            userEmail: inputCreateUser.email,
             password: "123456"
         };
         
         // Execute the use case to authenticate a user
         const outputAuthenticateUser: ResponseAuthenticateUser = await authenticateUser.execute(inputAuthenticateUser);
-        expect(outputAuthenticateUser.value).toBeDefined();
+
+        expect(outputAuthenticateUser.isRight()).toBeTruthy();
         
         // Close the connection after database operations
         await connection.close();
