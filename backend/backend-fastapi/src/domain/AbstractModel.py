@@ -14,3 +14,7 @@ class AbstractModel(ABC):
     @abstractmethod
     def prediction(self):
         pass
+
+    @abstractmethod
+    def convertPrediction(self):
+        pass

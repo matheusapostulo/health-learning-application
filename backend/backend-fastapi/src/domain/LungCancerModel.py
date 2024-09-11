@@ -21,9 +21,16 @@ class LungCancerModel(AbstractModel):
         self.chest_pain = data['chest_pain']
         super().__init__(model_path)
 
+    def convertPrediction(self, int_predicition):
+        map_parameters = {1: "NO", 2: "YES"}
+        return map_parameters.get(int_predicition)
+
     def prediction(self) -> any:
         data = self.as_list()
-        return int(self.model.predict([data]))
+        prediction = self.model.predict([data])
+        int_prediction = int(prediction)
+        converted_prediction = self.convertPrediction(int_prediction)
+        return converted_prediction
         
 class LungCancerDTO(BaseModel):
     gender: int
