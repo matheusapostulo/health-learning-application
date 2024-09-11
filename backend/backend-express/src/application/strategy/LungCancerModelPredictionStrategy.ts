@@ -45,10 +45,11 @@ export default class LungCancerModelPredictionStrategy extends ModelPredictionSt
 
     protected convertParameters(parameters: ParametersPrediction[]): object {
         let convertedParameters = {};
+        const isBoolean = (value: any): value is boolean => typeof value === 'boolean';
         parameters.forEach((parameter) => {
             convertedParameters = 
                 {...convertedParameters, 
-                    [parameter.name]: parameter.value == true || parameter.value == false ? 
+                    [parameter.name]: isBoolean(parameter.value) ? 
                         this.mapValue(parameter.value) 
                         : 
                         Number(parameter.value)

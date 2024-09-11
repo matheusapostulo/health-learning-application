@@ -176,7 +176,6 @@ it("Should obtain model prediction", async () => {
         const outputObtainModelPrediction = await obtainModelPrediction.execute(inputObtainModelPrediction);
         expect(outputObtainModelPrediction.isRight()).toBeTruthy();
         if(outputObtainModelPrediction.isRight()){
-            console.log(outputObtainModelPrediction.value);
             let getUserOutput = await getUser.execute(outputCreateUser.value.id);
             if(getUserOutput.isRight()){
                 expect(getUserOutput.value.predictions[0].modelId).toBe(outputCreateModel.value.id);
