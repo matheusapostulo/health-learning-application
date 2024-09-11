@@ -21,6 +21,9 @@ import BcryptEncryptService from "./infra/services/BcryptEncryptService";
 import JsonwebtokenJwtService from "./infra/services/JsonwebtokenJwtService";
 import TransactionRepositoryDatabase from "./infra/repository/TransactionRepositoryDatabase";
 import UnfavoriteModel from "./application/usecase/UnfavoriteModel";
+import ObtainModelPrediction from "./application/usecase/ObtainModelPrediction";
+import LungCancerModelPredictionStrategy from "./application/strategy/LungCancerModelPredictionStrategy";
+import ObtainModelPredictionRoute from "./infra/api/express/routes/user/ObtainModelPrediction.route";
 
 function main() {
     // Connection to the database
@@ -35,7 +38,11 @@ function main() {
     const encryptService = new BcryptEncryptService();
     const jwtService = new JsonwebtokenJwtService();
 
-    // Importing use cases
+    /* Machine Learning Models Strategy */
+    // Lung Cancer Strategy
+    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("predict/lung-cancer");
+
+    /* Importing use cases */
     const getModel = new GetModel(connection);
     const createModel = new CreateModel(modelRepository);
     const getModelByCategory = new GetModelsByCategory(connection);
@@ -44,8 +51,10 @@ function main() {
     const createUser = new CreateUser(userRepository, encryptService, connection);
     const favoriteModel = new FavoriteModel(userRepository, modelRepository, transactionRepository);
     const unfavoriteModel = new UnfavoriteModel(userRepository, modelRepository, transactionRepository);
+    // Lung Cancer Prediction
+    const obtainModelPredictionLungCancer = new ObtainModelPrediction(connection, userRepository, lungCancerModelPredictionStrategy);
 
-    // Importing routes
+    /* Importing routes */
     const getModelRoute = GetModelRoute.create(getModel);
     const createModelRoute = CreateModelRoute.create(createModel);
     const getModelByCategoryRoute = GetModelsByCategoryRoute.create(getModelByCategory); 
@@ -54,6 +63,8 @@ function main() {
     const createUserRoute = CreateUserRoute.create(createUser);
     const favoriteModelRoute = FavoriteModelRoute.create(favoriteModel);
     const unfavoriteModelRoute = UnfavoriteModelRoute.create(unfavoriteModel);
+    // Lung Cancer Route
+    const obtainModelPredictionRoute = ObtainModelPredictionRoute.create(obtainModelPredictionLungCancer)
 
     // Initialize the API
     const api = ApiExpress.create([
@@ -63,7 +74,8 @@ function main() {
         authenticateUserRoute, 
         getUserRoute, createUserRoute, 
         favoriteModelRoute, 
-        unfavoriteModelRoute
+        unfavoriteModelRoute,
+        obtainModelPredictionRoute
     ], jwtService);
     const port = 3000;
     api.start(port);

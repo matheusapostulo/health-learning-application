@@ -5,12 +5,14 @@ import CreateUserRoute from './../../../src/infra/api/express/routes/user/Create
 import AuthenticateUserRoute from './../../../src/infra/api/express/routes/user/AuthenticateUser.express.route.ts';
 import FavoriteModelRoute from './../../../src/infra/api/express/routes/user/FavoriteModel.express.route';
 import UnfavoriteModelRoute from '../../../src/infra/api/express/routes/user/UnfavoriteModel.express.route.ts';
+import ObtainModelPredictionRoute from '../../../src/infra/api/express/routes/user/ObtainModelPrediction.route.ts';
 // Mocking usecases
 const GetUserUseCase = require('../../../src/application/usecase/GetUser.ts')
 const CreateUserUseCase = require('../../../src/application/usecase/CreateUser.ts')
 const AuthenticateUserUseCase = require('../../../src/application/usecase/AuthenticateUser.ts')
 const FavoriteModelUseCase = require('../../../src/application/usecase/FavoriteModel')
 const UnfavoriteModelUseCase = require('../../../src/application/usecase/UnfavoriteModel')
+const ObtainModelPredictionUseCase = require('../../../src/application/usecase/ObtainModelPrediction.ts')
 // Mocking the user usecases
 jest.mock('../../../src/application/usecase/GetUser.ts')
 jest.mock('../../../src/application/usecase/CreateUser.ts')
@@ -191,6 +193,104 @@ describe('unfavoriteModel', () => {
 
     it('Should unfavorite a model with getHandler method', async () => {
         const handler = unfavoriteModelRoute.getHandler();
+        expect(handler).toBeDefined()
+    });
+})
+
+describe('ObtainModelPrediction', () => {
+    const mockOutput = Promise.resolve();
+    // Mocking the CreateModel execute method
+    ObtainModelPredictionUseCase.execute = jest.fn();
+    ObtainModelPredictionUseCase.execute.mockResolvedValue(mockOutput);
+
+    const inputObtainModelPrediction = {
+        userId: '1234',
+        modelId: '12345',
+        parameters: [
+            {
+                name: "gender",
+                value: false,
+            },
+            {
+                name: "age",
+                value: "59",
+            },
+            {
+                name: "smoker",
+                value: false,
+            },
+            {
+                name: "yellow_fingers",
+                value: false,
+            },
+            {
+                name: "anxiety",
+                value: false,
+            },
+            {
+                name: "peer_pressure",
+                value: true,
+            },
+            {
+                name: "chronic_disease",
+                value: false,
+            },
+            {
+                name: "fatigue",
+                value: true,
+            },
+            {
+                name: "allergy",
+                value: false,
+            },
+            {
+                name: "wheezing",
+                value: true,
+            },
+            {
+                name: "alcohol_consume",
+                value: false,
+            },
+            {
+                name: "coughing",
+                value: true,
+            },
+            {
+                name: "shortness_of_breath",
+                value: true,
+            },
+            {
+                name: "swallowing_difficulty",
+                value: false,
+            },
+            {
+                name: "chest_pain",
+                value: true,
+            },
+        ],
+    }
+
+    const req = { 
+        params: inputObtainModelPrediction
+    } as unknown as Request;
+    const res = { 
+        status: jest.fn().mockReturnThis(), 
+        json: jest.fn() 
+    } as unknown as Response;
+
+    // Route
+    const obtainModelPredictionRoute = ObtainModelPredictionRoute.create(ObtainModelPredictionUseCase);
+
+    it('Should get the handler api method with getMethod method', () => {
+        expect(obtainModelPredictionRoute.getMethod()).toBe('post');
+    });
+    
+    it("Should get the handler api path with getPath method", () => {
+        expect(obtainModelPredictionRoute.getPath()).toBe('/users/:userId/prediction/:modelId');
+    });
+
+    it('Should unfavorite a model with getHandler method', async () => {
+        const handler = obtainModelPredictionRoute.getHandler();
         expect(handler).toBeDefined()
     });
 })
