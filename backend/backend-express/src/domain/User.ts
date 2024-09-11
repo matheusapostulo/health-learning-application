@@ -81,6 +81,15 @@ export default class User {
     }
 
     addPrediction(modelId: string, predictionResult: string) {
+        const modelAlreadyPredicted = this.predictions.findIndex(prediction => prediction.modelId === modelId);
+        if(modelAlreadyPredicted !== -1) {
+            this.predictions[modelAlreadyPredicted] = {
+                modelId,
+                predictionResult,
+                createdAt: new Date()
+            };
+            return;
+        }
         this.predictions.push({
             modelId,
             predictionResult,
