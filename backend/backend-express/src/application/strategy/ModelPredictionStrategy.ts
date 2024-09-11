@@ -12,7 +12,7 @@ export default abstract class ModelPredictionStrategy {
 
     abstract predict(parameters: any): Promise<PredicitionResult>;
     protected abstract validateParameters(parameters: any): boolean;
-    protected abstract mapValue(parameter: string): number | null;
+    protected abstract mapValue(parameter: any): number | null;
     protected abstract convertParameters(parameters: ParametersPrediction[]): object;
 }
 

@@ -4,7 +4,6 @@ import { PrismaClientAdapter } from "../../src/infra/database/PrismaClientAdapte
 import UserRepositoryDatabase from "../../src/infra/repository/UserRepositoryDatabase";
 import BcryptEncryptService from "../../src/infra/services/BcryptEncryptService";
 import ModelRepositoryDatabase from "../../src/infra/repository/ModelRepositoryDatabase";
-import GetModel from "../../src/application/usecase/GetModel";
 import GetUser from "../../src/application/usecase/GetUser";
 import CreateModel from "../../src/application/usecase/CreateModel";
 import ObtainModelPrediction from "../../src/application/usecase/ObtainModelPrediction";
@@ -27,23 +26,78 @@ it("Should obtain model prediction", async () => {
     const obtainModelPrediction = new ObtainModelPrediction(connection, userRepository, lungCancerModelPredictionStrategy);
     // Input to create a model
     const inputCreateModel = {
-        modelName: "Model Test Obtain Prediction Model",
-        description:'Model Test Description',
-        category: 'Test',
-        accuracy: 0.885,
+        modelName: "Câncer de Pulmão",
+        description:'Esse modelo prevê a chance de um paciente ter câncer de pulmão.',
+        category: 'Pulmão',
+        accuracy: 0.9787,
         parameters: [
             {
-            name: "Attribute 1",
-            type: typeParameter.Number,
+                name: "Gênero",
+                type: typeParameter.Boolean,
+            },{
+                name: "Idade",
+                type: typeParameter.Number,
+            }, {
+                name: "Fumante",
+                type: typeParameter.Boolean,
             },
+            {
+                name: "Dedos Amarelos",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Ansiedade",
+                type: typeParameter.Boolean,
+            }, 
+            {
+                name: "Pressão dos Pares",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Doença Crônica",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Fadiga",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Alergia",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Chiado",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Consumo de Álcool",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Tosse",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Falta de Ar",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Dificuldade para Engolir",
+                type: typeParameter.Boolean,
+            },
+            {
+                name: "Dor no Peito",
+                type: typeParameter.Boolean,
+            }
+
         ],
         createdAt: new Date(),
     }
     // Inputs to create a user
     const randomEmail = `${crypto.randomBytes(10).toString('hex')}@test.com`;
     const inputCreateUser = {
-        name: "User",
-        lastName: "Test",
+        name: "Matheus",
+        lastName: "Henrique",
         email: randomEmail,
         password: "123456",
     }
@@ -59,69 +113,70 @@ it("Should obtain model prediction", async () => {
             parameters: [
                 {
                     name: "gender",
-                    value: "yes",
+                    value: false,
                 },
                 {
                     name: "age",
-                    value: "69",
+                    value: "59",
                 },
                 {
                     name: "smoker",
-                    value: "no",
+                    value: false,
                 },
                 {
                     name: "yellow_fingers",
-                    value: "yes",
+                    value: false,
                 },
                 {
                     name: "anxiety",
-                    value: "yes",
+                    value: false,
                 },
                 {
                     name: "peer_pressure",
-                    value: "no",
+                    value: true,
                 },
                 {
                     name: "chronic_disease",
-                    value: "no",
+                    value: false,
                 },
                 {
                     name: "fatigue",
-                    value: "yes",
+                    value: true,
                 },
                 {
                     name: "allergy",
-                    value: "no",
+                    value: false,
                 },
                 {
                     name: "wheezing",
-                    value: "yes",
+                    value: true,
                 },
                 {
                     name: "alcohol_consume",
-                    value: "yes",
+                    value: false,
                 },
                 {
                     name: "coughing",
-                    value: "yes",
+                    value: true,
                 },
                 {
                     name: "shortness_of_breath",
-                    value: "yes",
+                    value: true,
                 },
                 {
                     name: "swallowing_difficulty",
-                    value: "yes",
+                    value: false,
                 },
                 {
                     name: "chest_pain",
-                    value: "yes",
+                    value: true,
                 },
             ],
         }
         const outputObtainModelPrediction = await obtainModelPrediction.execute(inputObtainModelPrediction);
         expect(outputObtainModelPrediction.isRight()).toBeTruthy();
         if(outputObtainModelPrediction.isRight()){
+            console.log(outputObtainModelPrediction.value);
             let getUserOutput = await getUser.execute(outputCreateUser.value.id);
             if(getUserOutput.isRight()){
                 expect(getUserOutput.value.predictions[0].modelId).toBe(outputCreateModel.value.id);

@@ -34,10 +34,10 @@ export default class LungCancerModelPredictionStrategy extends ModelPredictionSt
         return this.requiredParameters.every(parameter => parameterMap.has(parameter));
     }
     
-    protected mapValue(parameter: string): number | null {
-        const mapping = new Map<string, number>([
-            ["yes", 1],
-            ["no", 2],
+    protected mapValue(parameter: boolean): number | null {
+        const mapping = new Map<boolean, number>([
+            [true, 2],
+            [false, 1],
         ]);
 
         return mapping.get(parameter) || null;
@@ -48,7 +48,7 @@ export default class LungCancerModelPredictionStrategy extends ModelPredictionSt
         parameters.forEach((parameter) => {
             convertedParameters = 
                 {...convertedParameters, 
-                    [parameter.name]: parameter.value == "yes" || parameter.value == "no" ? 
+                    [parameter.name]: parameter.value == true || parameter.value == false ? 
                         this.mapValue(parameter.value) 
                         : 
                         Number(parameter.value)
