@@ -1,6 +1,7 @@
 import { AppError } from "../errors/AppError.error";
 import { Either, left, right } from "../errors/either";
 import NotFoundError from "../errors/NotFound.error";
+import RequiredParametersError from "../errors/RequiredParameters.error";
 import DatabaseConnection from "../ports/database/DatabaseConnection";
 import UserRepository from "../repository/UserRepository";
 import ModelPredictionStrategy from "../strategy/ModelPredictionStrategy";
@@ -25,7 +26,14 @@ export default class ObtainModelPrediction {
                 return left(new NotFoundError(input.userId));
             }
             // Doing the prediction
-            const predictionResult = await this.modelPredictionStrategy.predict(input.parameters);
+            const predictionResultOrError = await this.modelPredictionStrategy.predict(input.parameters);
+            if(predictionResultOrError.success === false && predictionResultOrError.valueOrError === "Invalid parameters") {
+                return left(new RequiredParametersError("parameters"));
+            }
+            if(predictionResultOrError.success === false) {
+                return left(new AppError.UnexpectedError);
+            }
+            let predictionResult = predictionResultOrError.valueOrError;
             // Adding the prediction to the user
             user.addPrediction(model.id, predictionResult);
             // Saving the user
@@ -39,9 +47,9 @@ export default class ObtainModelPrediction {
     }
 }
 
-type ParametersPrediction = {
+export type ParametersPrediction = {
     name: string;
-    value: string | number;
+    value: string | number | boolean;
 }
 
 export interface InputObtainModelPredictionDto {
@@ -56,7 +64,8 @@ export interface OutputObtainModelPredictionDto {
 
 export type ResponseObtainModelPrediction = Either<
     AppError.UnexpectedError |
-    NotFoundError
+    NotFoundError |
+    RequiredParametersError
     ,
     OutputObtainModelPredictionDto
 >;

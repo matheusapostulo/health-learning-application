@@ -1,32 +1,59 @@
-import ModelPredictionStrategy from "./ModelPredictionStrategy";
+import { ParametersPrediction } from "../usecase/ObtainModelPrediction";
+import ModelPredictionStrategy, { PredicitionResult } from "./ModelPredictionStrategy";
 import axios from 'axios';
-export default class LungCancerModelPredictionStrategy implements ModelPredictionStrategy {
-    constructor(readonly modelAPIUrl: string){}
+
+export default class LungCancerModelPredictionStrategy extends ModelPredictionStrategy {
+    constructor(
+        readonly modelAPIUrl: string, 
+        readonly requiredParameters: string[] = 
+            ['gender', 'age', 'smoker', 'yellow_fingers', 'anxiety', 'peer_pressure', 'chronic_disease', 'fatigue', 'allergy', 'wheezing', 'alcohol_consume', 'coughing', 'shortness_of_breath', 'swallowing_difficulty', 'chest_pain']
+    ) {
+        super(modelAPIUrl, requiredParameters);
+    }
     
-    async predict(): Promise<any> {
-        const data = {
-            gender: 2,
-            age: 69,
-            smoker: 1,
-            yellow_fingers: 2,
-            anxiety: 2,
-            peer_pressure: 1,
-            chronic_disease: 1,
-            fatigue: 2,
-            allergy: 1,
-            wheezing: 2,
-            alcohol_consume: 2,
-            coughing: 2,
-            shortness_of_breath: 2,
-            swallowing_difficulty: 2,
-            chest_pain: 2
-        };
+    async predict(parameters: ParametersPrediction[]): Promise<PredicitionResult> {       
+        const isValidParameters = this.validateParameters(parameters);
+        if(!isValidParameters) {
+            return {success: false, valueOrError: "Invalid parameters"};
+        }
+
+        const convertedParameters = this.convertParameters(parameters);
+
         try {
-            const res = await axios.post("http://host.docker.internal:4000/predict/lung-cancer", data)
-            return res.data.prediction.toString();
+            const res = await axios.post(this.getAPIUrl(), convertedParameters)
+            return {success: true, valueOrError:res.data.prediction.toString()};
         } catch (error) {
-            console.log(error);
             throw error;
         }
+    }
+
+    protected validateParameters(parameters: ParametersPrediction[]): boolean {
+        const parameterMap = new Map<string, any>();
+        parameters.forEach((parameter) => parameterMap.set(parameter.name, parameter.value));
+    
+        return this.requiredParameters.every(parameter => parameterMap.has(parameter));
+    }
+    
+    protected mapValue(parameter: string): number | null {
+        const mapping = new Map<string, number>([
+            ["yes", 1],
+            ["no", 2],
+        ]);
+
+        return mapping.get(parameter) || null;
+    }
+
+    protected convertParameters(parameters: ParametersPrediction[]): object {
+        let convertedParameters = {};
+        parameters.forEach((parameter) => {
+            convertedParameters = 
+                {...convertedParameters, 
+                    [parameter.name]: parameter.value == "yes" || parameter.value == "no" ? 
+                        this.mapValue(parameter.value) 
+                        : 
+                        Number(parameter.value)
+                };
+        });
+        return convertedParameters;
     }
 }
