@@ -28,7 +28,7 @@ export default class GetModelsByCategoryRoute implements Route {
             const output: ResponseGetModelsByCategory = await this.GetModelsByCategoryUseCase.execute(category);  
 
             if(output.isLeft()){
-                response.status(output.value.statusCode).json({message :output.value.message});
+                response.status(output.value.statusCode).json({error_code: output.value.errorCode, error_description: output.value.message});
                 return;
             }
 

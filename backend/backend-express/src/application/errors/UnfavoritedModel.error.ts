@@ -1,5 +1,6 @@
 export namespace UnfavoriteModelError {
     export class UserFavoritesNotFoundError extends Error {
+        private _errorCode: string = "USER_FAVORITES_NOT_FOUND";
         private _message: string;
         private _statusCode: number = 400;
 
@@ -7,6 +8,10 @@ export namespace UnfavoriteModelError {
             let message = "User does not have this model as favorite";
             super(message);
             this._message = message;
+        }
+
+        get errorCode(){
+            return this._errorCode;
         }
 
         get message(){

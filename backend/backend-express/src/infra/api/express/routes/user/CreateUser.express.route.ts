@@ -30,7 +30,7 @@ export default class CreateUserRoute implements Route {
             console.log(output);
             
             if(output.isLeft()){
-                response.status(output.value.statusCode).json({ message: output.value.message});
+                response.status(output.value.statusCode).json({error_code: output.value.errorCode, error_description: output.value.message});
                 return;
             }
 

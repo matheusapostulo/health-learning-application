@@ -28,7 +28,7 @@ export default class GetUserRoute implements Route {
             const output: ResponseGetUser = await this.GetUserUseCase.execute(id);
 
             if(output.isLeft()){
-                response.status(output.value.statusCode).json({message:output.value.message});
+                response.status(output.value.statusCode).json({error_code: output.value.errorCode, error_description: output.value.message});
                 return;
             }
 

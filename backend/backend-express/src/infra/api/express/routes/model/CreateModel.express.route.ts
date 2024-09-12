@@ -28,7 +28,7 @@ export default class CreateModelRoute implements Route {
             const output: ResponseCreateModel = await this.GetModelUseCase.execute(input);
 
             if(output.isLeft()){
-                response.status(output.value.statusCode).json({message :output.value.message});
+                response.status(output.value.statusCode).json({error_code: output.value.errorCode, error_description: output.value.message});
                 return;
             }
 
