@@ -14,7 +14,7 @@ export default class GetUserRoute implements Route {
 
     public static create(GetUserUseCase: Usecase){
         return new GetUserRoute(
-            '/users/:email', 
+            '/users/:id', 
             HttpMethod.GET, 
             GetUserUseCase,
             RequiresAuthentication.NOT_REQUIRES_AUTHENTICATION
@@ -26,6 +26,8 @@ export default class GetUserRoute implements Route {
             const {id} = request.params;
 
             const output: ResponseGetUser = await this.GetUserUseCase.execute(id);
+
+            console.log("Output:", id);
 
             if(output.isLeft()){
                 response.status(output.value.statusCode).json({error_code: output.value.errorCode, error_description: output.value.message});

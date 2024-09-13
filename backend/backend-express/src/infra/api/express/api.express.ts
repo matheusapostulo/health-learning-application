@@ -52,8 +52,9 @@ export default class ApiExpress implements Api{
     }
 
     private checkTokenAndAuthorize = async (req: Request, res: Response, next: NextFunction) => {
-        const token = req.headers.authorization;
-        
+        const authHeader = req.headers.authorization;
+        const token = authHeader?.split(" ")[1];
+
         if(!token) {
             return res.status(401).json({message: "Erro: Token não enviado."});
         }
