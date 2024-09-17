@@ -15,7 +15,7 @@ export default class UnfavoriteModelRoute implements Route {
 
     public static create(UnfavoriteModelUseCase: Usecase){
         return new UnfavoriteModelRoute(
-            '/users/:userEmail/favorites/:modelId', 
+            '/users/:userId/favorites/:modelId', 
             HttpMethod.DELETE, 
             UnfavoriteModelUseCase,
             RequiresAuthentication.REQUIRES_AUTHENTICATION

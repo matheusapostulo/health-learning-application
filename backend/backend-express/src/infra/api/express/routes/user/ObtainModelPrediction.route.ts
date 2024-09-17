@@ -14,7 +14,7 @@ export default class ObtainModelPredictionRoute implements Route {
 
     public static create(ObtainModelPredictionUseCase: Usecase){
         return new ObtainModelPredictionRoute(
-            '/users/:userId/prediction/:modelId', 
+            '/users/:userId/models/:modelId/prediction', 
             HttpMethod.POST, 
             ObtainModelPredictionUseCase,
             RequiresAuthentication.REQUIRES_AUTHENTICATION

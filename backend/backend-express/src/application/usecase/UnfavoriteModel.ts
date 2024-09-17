@@ -37,7 +37,6 @@ export default class UnfavoriteModel {
             await this.transactionRepository.favoriteUnfavoriteModelTransaction(user, model);
             return right(true);
         } catch (error) {
-            console.log(error);
             return left(new AppError.UnexpectedError());
         }
     }

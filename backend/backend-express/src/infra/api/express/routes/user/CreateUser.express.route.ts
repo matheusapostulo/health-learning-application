@@ -26,8 +26,6 @@ export default class CreateUserRoute implements Route {
             const input: InputCreateUserDto = request.body;
 
             const output: ResponseCreateUser = await this.CreateUserUseCase.execute(input);
-
-            console.log(output);
             
             if(output.isLeft()){
                 response.status(output.value.statusCode).json({error_code: output.value.errorCode, error_description: output.value.message});

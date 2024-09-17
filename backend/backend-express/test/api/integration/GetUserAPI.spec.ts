@@ -33,7 +33,6 @@ describe("Get User API", () => {
             .get(`/users/12345678`)
             .expect(404)
 
-        console.log(responseGetUser.body);
         expect(responseGetUser.body.error_code).toBe("NOT_FOUND");
         expect(responseGetUser.body.error_description).toBe(`'12345678' not found`);
     });

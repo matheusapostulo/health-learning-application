@@ -14,7 +14,7 @@ export default class FavoriteModelRoute implements Route {
 
     public static create(FavoriteModelUseCase: Usecase){
         return new FavoriteModelRoute(
-            '/users/:userEmail/favorites/:modelId', 
+            '/users/:userId/favorites/:modelId', 
             HttpMethod.POST, 
             FavoriteModelUseCase,
             RequiresAuthentication.REQUIRES_AUTHENTICATION

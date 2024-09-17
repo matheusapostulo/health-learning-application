@@ -42,7 +42,7 @@ describe('getUser', () => {
     });
     
     it("Should get the handler api path with getPath method", () => {
-        expect(getUserRoute.getPath()).toBe('/users/:email');
+        expect(getUserRoute.getPath()).toBe('/users/:id');
     });
 
     it('Should get a user with getHandler method', async () => {
@@ -132,7 +132,7 @@ describe('favoriteModel', () => {
     FavoriteModelUseCase.execute.mockResolvedValue(mockOutput);
 
     const InputFavoriteModel = {
-        userEmail: "test@gmail.com",
+        userId: "test@gmail.com",
         modelId:'123'
     }
 
@@ -152,7 +152,7 @@ describe('favoriteModel', () => {
     });
     
     it("Should get the handler api path with getPath method", () => {
-        expect(favoriteModelRoute.getPath()).toBe('/users/:userEmail/favorites/:modelId');
+        expect(favoriteModelRoute.getPath()).toBe('/users/:userId/favorites/:modelId');
     });
 
     it('Should favorite a model with getHandler method', async () => {
@@ -168,7 +168,7 @@ describe('unfavoriteModel', () => {
     UnfavoriteModelUseCase.execute.mockResolvedValue(mockOutput);
 
     const InputUnfavoriteModel = {
-        userEmail: "test@gmail.com",
+        userId: "test@gmail.com",
         modelId:'123'
     }
 
@@ -188,7 +188,7 @@ describe('unfavoriteModel', () => {
     });
     
     it("Should get the handler api path with getPath method", () => {
-        expect(unfavoriteModelRoute.getPath()).toBe('/users/:userEmail/favorites/:modelId');
+        expect(unfavoriteModelRoute.getPath()).toBe('/users/:userId/favorites/:modelId');
     });
 
     it('Should unfavorite a model with getHandler method', async () => {
@@ -286,7 +286,7 @@ describe('ObtainModelPrediction', () => {
     });
     
     it("Should get the handler api path with getPath method", () => {
-        expect(obtainModelPredictionRoute.getPath()).toBe('/users/:userId/prediction/:modelId');
+        expect(obtainModelPredictionRoute.getPath()).toBe('/users/:userId/models/:modelId/prediction');
     });
 
     it('Should unfavorite a model with getHandler method', async () => {

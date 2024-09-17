@@ -14,7 +14,7 @@ export default class GetModel {
         try {
             const model = await this.connection.findUnique(id, 'model');
             if(!model){
-                throw left(new NotFoundError(id));
+                return left(new NotFoundError(id));
             }
             return right(model);
         } catch (error) {
