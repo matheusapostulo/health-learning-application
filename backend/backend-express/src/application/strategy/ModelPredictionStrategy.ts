@@ -1,7 +1,9 @@
 import { ParametersPrediction } from "../usecase/ObtainModelPrediction";
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default abstract class ModelPredictionStrategy {
-    baseAPIUrl: string = "http://host.docker.internal:4000/";
+    baseAPIUrl: string = process.env.FASTAPI_URL as string;
 
     constructor(readonly modelAPIUrl: string, readonly requiredParameters: string[]){
     };

@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 import request from 'supertest';
-const API_URL = process.env.API_URL || "http://host.docker.internal:3000";
+import dotenv from 'dotenv';
+dotenv.config();
+const API_URL = process.env.API_URL;
 
 describe("Get User API", () => {
     const randomEmail = `${crypto.randomBytes(10).toString('hex')}@test.com`;

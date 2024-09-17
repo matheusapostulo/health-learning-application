@@ -11,7 +11,7 @@ export default class LungCancerModelPredictionStrategy extends ModelPredictionSt
         super(modelAPIUrl, requiredParameters);
     }
     
-    async predict(parameters: ParametersPrediction[]): Promise<PredicitionResult> {       
+    async predict(parameters: ParametersPrediction[]): Promise<PredicitionResult> {   
         const isValidParameters = this.validateParameters(parameters);
         if(!isValidParameters) {
             return {success: false, valueOrError: "Invalid parameters"};

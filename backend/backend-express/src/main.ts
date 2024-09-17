@@ -40,7 +40,7 @@ function main() {
 
     /* Machine Learning Models Strategy */
     // Lung Cancer Strategy
-    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("predict/lung-cancer");
+    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("/predict/lung-cancer");
 
     /* Importing use cases */
     const getModel = new GetModel(connection);

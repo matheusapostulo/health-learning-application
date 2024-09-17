@@ -18,7 +18,7 @@ it("Should obtain model prediction", async () => {
     const modelRepository = new ModelRepositoryDatabase(connection);
     const encryptService = new BcryptEncryptService();
     const getUser = new GetUser(connection);
-    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("predict/lung-cancer");
+    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("/predict/lung-cancer");
     // Instance of other required use cases
     const createUser = new CreateUser(userRepository, encryptService, connection);
     const createModel = new CreateModel(modelRepository);
@@ -193,7 +193,7 @@ it("Should throw a error when a required paramater is missing", async () => {
     const modelRepository = new ModelRepositoryDatabase(connection);
     const encryptService = new BcryptEncryptService();
     const getUser = new GetUser(connection);
-    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("predict/lung-cancer");
+    const lungCancerModelPredictionStrategy = new LungCancerModelPredictionStrategy("/predict/lung-cancer");
     // Instance of other required use cases
     const createUser = new CreateUser(userRepository, encryptService, connection);
     const createModel = new CreateModel(modelRepository);

@@ -1,6 +1,8 @@
 import crypto from "crypto";
-const request = require("supertest");
-const API_URL = process.env.API_URL || "http://host.docker.internal:3000";
+import request from 'supertest';
+import dotenv from 'dotenv';
+dotenv.config();
+const API_URL = process.env.API_URL;
 
 describe("Obtain Model Prediction API", () => {
     const randomEmail = `${crypto.randomBytes(10).toString('hex')}@test.com`;
