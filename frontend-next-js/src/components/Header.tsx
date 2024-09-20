@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Button } from "./Button"
 
 const navigation = [ 
     { title: "início", href:"/" }, { title: "modelos", href:"/Teste" }, { title: "sobre", href:"teste" }, { title: "contato", href:"teste" },
@@ -23,10 +24,10 @@ export default function Header() {
                         })}
                     </ol>
                 </nav>
-                <section className="lg:border border-gray-main rounded-md w-40 xl:w-56 h-full"/>
+                <section className="lg:border border-gray-main rounded-md w-40 xl:w-56 h-4/5"/>
                 <section className="hidden md:flex md:space-x-4">
-                    <button className="px-5 py-2 text-gray-main text-sm font-bold">Entrar</button>
-                    <button className="bg-gray-main px-7 py-2 text-white text-sm font-bold rounded-md">Criar conta</button>
+                    <Button href="/Teste" variant="secondary_outline" size="md">Entrar</Button>
+                    <Button href="/Teste" variant="secondary" size="md">Criar Conta</Button>
                 </section>
             </nav>
         </header> 
