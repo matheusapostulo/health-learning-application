@@ -1,6 +1,6 @@
 "use client" // Context's must to be client components
 import { createContext, useContext, useState} from "react"
-import Header from "../../components/Header";
+import Header from "@/components/Header";
 
 
 // Crearting our context

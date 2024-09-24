@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
+import { Inter } from 'next/font/google'
 import "./globals.css";
 import Header from "../components/Header";
 
-const lato = Lato({ weight: ['100', '300', '400', '700', '900'], subsets: ["latin"] });
+// const lato = Lato({ weight: ['100', '300', '400', '700', '900'], subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: "Health Learning",
@@ -13,8 +15,8 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
 return (
     <html lang="pt-br">
-      <body className={lato.className}>
-        <main className="h-screen">
+      <body className={inter.className}>
+        <main className="h-screen text-gray-main">
           <Header/>
           {children}
         </main>

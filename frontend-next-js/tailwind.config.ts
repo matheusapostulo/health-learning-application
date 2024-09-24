@@ -8,6 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+				fade: 'fadeIn .5s ease-in-out',
+			},
+
+			keyframes: {
+				fadeIn: {
+					from: { opacity: "0"},
+					to: { opacity: "1" },
+				},
+			},
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -15,13 +25,12 @@ const config: Config = {
       },
       colors: {
         beige: {
-          main: "#B9AFA9",
+          main: "#B4A79E",
           "main-2": "#E1DCD8",
         },
         gray: {
           main: "#333333"
         }
-
       },
     },
   },

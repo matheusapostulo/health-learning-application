@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, buttonVariants } from "@/components/Button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useRef } from "react";
 
 export default function Home() { 

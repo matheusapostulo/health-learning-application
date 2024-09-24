@@ -1,4 +1,4 @@
-import { cn } from "@/utils"
+import { cn } from "@/lib/utils"
 import { VariantProps, cva } from "class-variance-authority"
 import Link from "next/link"
 import { ButtonHTMLAttributes, forwardRef } from "react"
