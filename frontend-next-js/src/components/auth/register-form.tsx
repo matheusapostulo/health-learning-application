@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { promise, type z } from "zod";
+import { type z } from "zod";
 
 import { register } from "@/actions/auth";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -57,7 +57,7 @@ export default function RegisterForm() {
 	};
 
 	return (
-		<AuthCard title="Criar conta">
+		<AuthCard title="Criar conta" description="Crie uma conta e faça uma avaliação em nossos modelos">
 			<div className="space-y-4">
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
@@ -113,7 +113,14 @@ export default function RegisterForm() {
 									<FormItem>
 										<FormLabel>E-mail</FormLabel>
 										<FormControl>
-											<Input type="email" placeholder="voce@seuemail.com" required {...field} disabled={isPending} />
+											<Input 
+												autoComplete="off"
+												type="email" 
+												placeholder="voce@seuemail.com" 
+												required 
+												{...field} 
+												disabled={isPending} 
+											/>
 										</FormControl>
 										<FormDescription className="hidden">Seu e-mail.</FormDescription>
 										<FormMessage />
@@ -127,7 +134,14 @@ export default function RegisterForm() {
 									<FormItem>
 										<FormLabel>Senha</FormLabel>
 										<FormControl>
-											<Input type="password" placeholder="******" required {...field} disabled={isPending} />
+											<Input 
+												autoComplete="off"
+												type="password" 
+												placeholder="******" 
+												required 
+												{...field} 
+												disabled={isPending} 
+											/>
 										</FormControl>
 										<FormDescription className="hidden">Sua Senha.</FormDescription>
 										<FormMessage />

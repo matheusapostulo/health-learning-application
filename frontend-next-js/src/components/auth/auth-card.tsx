@@ -1,16 +1,24 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface AuthCardProps {
 	title?: string;
 	description?: string;
+	titleHiglight?: string;
 	children: React.ReactNode;
 }
 
-const AuthCard = ({ title, children }: AuthCardProps) => {
+const AuthCard = ({ title, description, titleHiglight, children }: AuthCardProps) => {
 	return (
-		<Card className="mx-auto w-4/12 min-w-[350px]">
+		<Card className="w-4/12 min-w-[350px] px-6">
 			<CardHeader>
-				{title && <CardTitle className="text-2xl">{title}</CardTitle>}
+				<div className="flex flex-row">
+					{title &&
+						<CardTitle className="text-2xl font-normal tracking-normal">
+							{title} {titleHiglight &&<span className="font-bold">{titleHiglight}</span>}
+						</CardTitle>
+					}
+				</div>
+				{description && <CardDescription>{description}</CardDescription>}
 			</CardHeader>
 			<CardContent>{children}</CardContent>
 		</Card>

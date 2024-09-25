@@ -2,18 +2,18 @@ import Link from "next/link"
 import { Button } from "./ui/button"
 
 const navigation = [ 
-    { title: "início", href:"/" }, { title: "modelos", href:"/Teste" }, { title: "sobre", href:"teste" }, { title: "contato", href:"teste" },
+    { title: "Início", href:"/" }, { title: "Modelos", href:"/Teste" }, { title: "Sobre", href:"teste" }, { title: "Contato", href:"teste" },
 ]
 
 export default function Header() {
     return(
-        <header className="flex flex-col bg-white h-16 md:h-20 drop-shadow-xl justify-center w-full">
+        <header className="flex flex-col bg-white h-16 md:h-[72px] drop-shadow-xl justify-center w-full">
             <nav className="flex flex-row h-10 items-center justify-between mx-8 overflow-hidden">
                 <section className="">
                     <img src="/Logo.svg" className="w-32 sm:w-44" alt="logo-image"/>
                 </section>
                 <nav className="xl:ml-10 lg:ml-4 lg:mr-9">
-                    <ol className="hidden lg:flex lg:flex-row uppercase xl:gap-[7vw] lg:gap-[4vw] ">
+                    <ol className="hidden lg:flex lg:flex-row xl:gap-[7vw] lg:gap-[4vw] ">
                         {navigation.map((item) => {
                             return(
                                 <li key={item.title}>
