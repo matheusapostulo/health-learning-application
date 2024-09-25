@@ -45,6 +45,9 @@ it("Should authenticate a user", async () => {
         
         // Check if the token is valid. It'll be useful to check if the user is authenticated in the future
         if(outputAuthenticateUser.isRight()){
+            expect(outputAuthenticateUser.value.user).toBeDefined();
+            expect(outputAuthenticateUser.value.token).toBeDefined();
+            expect(outputAuthenticateUser.value.user.email).toBe(inputCreateUser.email);
             expect(await jwtService.checkToken(outputAuthenticateUser.value.token)).toBeTruthy();
         }
     }

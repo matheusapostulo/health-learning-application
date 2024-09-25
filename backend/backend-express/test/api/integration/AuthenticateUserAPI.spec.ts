@@ -28,6 +28,7 @@ describe("Authenticate User API", () => {
             })
             .expect(200)
 
+        expect(responseAuthUser.body.user).toBeDefined();
         expect(responseAuthUser.body.token).toBeDefined();
 
     });

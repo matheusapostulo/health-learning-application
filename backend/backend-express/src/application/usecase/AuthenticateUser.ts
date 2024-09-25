@@ -6,6 +6,7 @@ import UserRepository from "../repository/UserRepository";
 import { AppError } from '../errors/AppError.error';
 import { AuthenticateUserError } from '../errors/AuthenticateUser.error';
 import NotFoundError from '../errors/NotFound.error';
+import { Predictions } from '../../domain/User';
 
 export default class AuthenticateUser {
 
@@ -32,6 +33,14 @@ export default class AuthenticateUser {
             const token = await this.jwtService.generateToken({ email: user.getEmail() });
             
             return right({
+                user: {
+                    id: user.id,
+                    name: user.getName(),
+                    lastName: user.getLastName(),
+                    email: user.getEmail(),
+                    favoritedModels: user.getFavoriteModels(),
+                    predictions: user.getPredictions(),
+                },
                 token: token,
             });
             
@@ -47,6 +56,14 @@ export interface InputAuthenticateUserDto {
 }
 
 export interface OutputAuthenticateUserDto {
+    user: {
+        id: string;
+        name: string;
+        lastName: string;
+        email: string;
+        favoritedModels: string[];
+        predictions: Predictions[];
+    },
     token: string;
 }
 
