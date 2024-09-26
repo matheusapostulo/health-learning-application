@@ -33,9 +33,9 @@ export default function LoginForm() {
 		startTransition(async () => {
 			setError("");
 			setSuccess("");
-			await new Promise(resolve => setTimeout(resolve,1500))
+			// await new Promise(resolve => setTimeout(resolve,1500))
 			try {
-				const { success } = await login(values);
+				const { success, error } = await login(values);
 				if (error){
 					setError(error);
 					return;
@@ -44,7 +44,7 @@ export default function LoginForm() {
 				setTimeout(() => {
 					setSuccess("");
 					form.reset();
-					router.push("/login");
+					router.push("/");
 				}, 2000);
 			} catch (error) {
 				setSuccess("");
@@ -67,7 +67,7 @@ export default function LoginForm() {
                                         <FormLabel>E-mail</FormLabel>
                                         <FormControl>
                                             <Input
-                                                autoComplete="off"
+                                                autoComplete="on"
                                                 type="email"
                                                 placeholder="Seu email"
                                                 required

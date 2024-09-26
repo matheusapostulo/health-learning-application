@@ -3,6 +3,9 @@
 import { LoginSchema } from "@/schemas/auth";
 import type { z } from "zod";
 import { signIn } from "../../../../auth";
+import { AuthError, CredentialsSignin } from "next-auth";
+import { UserNotFoundError } from "@/lib/auth/user-not-found";
+import { InvalidCredentials } from "@/lib/auth/invalid-credentials";
 
 // type UserWithoutConfirmPassword = {
 //     name: string;
@@ -29,21 +32,29 @@ export const login = async (user: z.infer<typeof LoginSchema>) => {
 			error: "Dados inválidos",
 		};
 	}
-    const success = "Conta criada com sucesso. Faça o login";
-    const error = "Algo deu errado. Tente novamente.";
 
     try {
         const {userEmail, password} = validCredentials.data;
         // Send the user data to the server
-        const response = await signIn("credentials", {
+        await signIn("credentials", {
             userEmail,
             password,
-            redirectTo: "/",
+            redirect: false
         })
         
-
-        return { success: "Conta criada com sucesso. Faça o login" };
+        return { success: "Login feito com sucesso" };
     } catch(error){
-        return { error };
+        if (error instanceof AuthError) {
+            if(error instanceof UserNotFoundError){
+                return {
+                    error: "Usuário não encontrado",
+                }
+            } else if(error instanceof InvalidCredentials){
+                return {
+                    error: "Credenciais inválidas",
+                }
+            }
+		}   
+        throw error;
     }
 };

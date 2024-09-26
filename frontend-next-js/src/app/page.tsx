@@ -1,17 +1,13 @@
-'use client';
+import { auth } from "../../auth";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useRef } from "react";
-
-export default function Home() { 
-  const ref = useRef<null | HTMLButtonElement>(null);
+export default async function Home() { 
+  const session = await auth();
 
   return (
     <>
-      <div className="flex flex-col justify-center">
-        <p className="text-black-200 text-lg">conteúdo</p>
+      <div className="flex flex-col justify-center break-words">
+        <p className="text-black-200 text-lg">{JSON.stringify(session)}</p>
       </div>
-      <Button variant="default" size="lg">Criar Conta</Button>
     </>
   );
 }

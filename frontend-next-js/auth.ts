@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, {User} from "next-auth";
 import authConfig from "./auth.config";
 
 export const {
@@ -15,7 +15,25 @@ export const {
         signIn: "/login"
     },
     callbacks:{
-    
+        async jwt({token, user}){
+            if(user){
+                token.accessToken = user.token;
+                token.user = user.user;
+            }
+            return token;
+        },
+        async session({session, token}){ 
+            if(session.user && token.sub){
+                session.accessToken = token.accessToken;
+                session.user.user_data = token.user;
+            }
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                }
+            }
+        }
     },
     ...authConfig
 });
