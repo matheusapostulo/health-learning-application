@@ -1,3 +1,4 @@
+import { transform } from "next/dist/build/swc";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -9,13 +10,13 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-				fade: 'fadeIn .5s ease-in-out',
+				fade: 'fadeIn .6s ease-in-out forwards',
 			},
 
 			keyframes: {
 				fadeIn: {
-					from: { opacity: "0"},
-					to: { opacity: "1" },
+					from: { opacity: "0", transform: "translateY(5px)" },
+					to: { opacity: "1", transform: "translateY(0)" },
 				},
 			},
       backgroundImage: {

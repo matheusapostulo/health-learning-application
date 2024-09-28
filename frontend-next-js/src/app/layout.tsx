@@ -20,11 +20,9 @@ export default async function RootLayout({children}: Readonly<{children: React.R
     <html lang="pt-br">
       <SessionProvider session={session}>
         <body className={inter.className}>
-           <main className="h-screen text-gray-main flex flex-col">
+           <main className="h-screen text-gray-main flex flex-col space-y-10">
             <Header/>
-            <section className="mt-16 md:mt-[80px] flex-grow">
-              {children}
-            </section>
+            {children}
           </main>
         </body>
       </SessionProvider>
