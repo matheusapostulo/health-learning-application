@@ -26,7 +26,7 @@ const config: Config = {
       },
       colors: {
         beige: {
-          main: "#B4A79E",
+          main: "#9B8E85",
           "main-2": "#E1DCD8",
         },
         gray: {
