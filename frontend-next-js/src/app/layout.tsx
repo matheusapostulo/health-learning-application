@@ -16,13 +16,16 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
   const session = await auth();
+
   return (
     <html lang="pt-br">
       <SessionProvider session={session}>
         <body className={inter.className}>
-           <main className="h-screen text-gray-main flex flex-col space-y-10">
+           <main className="h-screen text-gray-main flex flex-col">
             <Header/>
-            {children}
+            <section className="px-4 md:px-20 pt-6 md:pt-10 pb-6 md:pb-10">
+              {children}
+            </section>
           </main>
         </body>
       </SessionProvider>

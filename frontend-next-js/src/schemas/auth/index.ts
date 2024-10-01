@@ -1,9 +1,9 @@
 import {z} from "zod";
 
 export const RegisterSchema = z.object({
-	name: z.string().min(4, "O nome precisa de no mínimo 4 caracteres"),
-	lastName: z.string().min(4, "O sobrenome precisa de no mínimo 4 caracteres"),
-	email: z.string().email("Formato de email inválido"),
+	name: z.string().min(3, "O nome precisa de no mínimo 4 caracteres").trim(),
+	lastName: z.string().min(3, "O sobrenome precisa de no mínimo 4 caracteres").trim(),
+	email: z.string().email("Formato de email inválido").trim(),
 	password: z.string().min(6, "A senha precisa de no mínimo 6 caracteres")
 		.regex(/[a-z]/, "A senha precisa de no mínimo uma letra minúscula")
 		.regex(/[A-Z]/, "A senha precisa de no mínimo uma letra maiúscula")
@@ -16,6 +16,11 @@ export const RegisterSchema = z.object({
 });
 
 export const LoginSchema = z.object({
-	userEmail: z.string().email("Formato de email inválido"),
+	userEmail: z.string().email("Formato de email inválido").trim(),
 	password: z.string()
 });
+
+export const RegisterHomeWithEmailSchema = z.object({
+	email: z.string().email("Formato de email inválido").trim()
+})
+

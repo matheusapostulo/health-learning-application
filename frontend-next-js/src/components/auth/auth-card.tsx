@@ -9,7 +9,7 @@ interface AuthCardProps {
 
 const AuthCard = ({ title, description, titleHiglight, children }: AuthCardProps) => {
 	return (
-		<Card className="w-4/12 min-w-[350px] px-6">
+		<Card className="w-[38%] min-w-[320px] px-6">
 			<CardHeader>
 				<div className="flex flex-row">
 					{title &&

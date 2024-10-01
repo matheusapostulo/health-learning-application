@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { type z } from "zod";
+import { set, type z } from "zod";
 import { login } from "@/actions/auth";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { LoginSchema } from "@/schemas/auth";
@@ -43,8 +43,8 @@ export default function LoginForm() {
 				setTimeout(() => {
 					setSuccess("");
 					form.reset();
-					router.push("/");
-				}, 2000);
+					router.push("/?reload=1");
+				}, 1500);
 			} catch (error) {
 				setSuccess("");
 				setError("Algo deu errado. Tente novamente.");
@@ -102,7 +102,7 @@ export default function LoginForm() {
                             />
 							{error && <AuthFormMessage type="error" message={error} title="Erro ao fazer login" />}
 							{success && <AuthFormMessage type="success" message={success} title="Login feito com sucesso" />}
-							<Button type="submit" variant="default" size="lg" className="w-full" disabled={isPending}>
+							<Button type="submit" variant="default" size="xl" className="w-full" disabled={isPending}>
 								<LoaderCircle className={!isPending ? "hidden" : "animate-spin mr-2"} />
 								<span>Entrar</span>
 							</Button>

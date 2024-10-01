@@ -42,7 +42,7 @@ export const login = async (user: z.infer<typeof LoginSchema>) => {
             redirect: false
         })
         
-        return { success: "Login feito com sucesso" };
+        return { success: "Seja bem vindo(a) de volta!" };
     } catch(error){
         if (error instanceof AuthError) {
             if(error instanceof UserNotFoundError){

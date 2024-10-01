@@ -10,14 +10,15 @@ const buttonVariants = cva(
         variant: {
           default: "bg-beige-main text-white",
           secondary: "bg-gray-main text-white font-bold",
-          secondary_outline: "bg-transparent text-gray-main",
+          secondary_outline: "bg-transparent border border-gray-main text-gray-main",
             
         },
         size: {
           default: 'h-10 py-2 px-4 rounded-md',
-          sm: 'h-9 px-2 rounded-md text-xs',
-          md: 'h-9 px-7 rounded-md',
-          lg: 'h-11 px-32 rounded-md',
+          sm: 'h-9 px-5 rounded-md text-xs',
+          md: 'h-10 px-7 rounded-md',
+          lg: 'h-11 px-10 rounded-md',
+          xl: 'h-11 px-32 rounded-md',
         },
       },
       defaultVariants: {

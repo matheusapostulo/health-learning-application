@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
@@ -18,6 +18,9 @@ import AuthFormMessage from "./auth-form-message";
 
 export default function RegisterForm() {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const emailSearchParams = searchParams.get("email");
+	console.log("Temos algo no sp?", emailSearchParams);
 	const [isPending, startTransition] = useTransition();
 	const [error, setError] = useState<string>("");
 	const [success, setSuccess] = useState<string>("");
@@ -26,7 +29,7 @@ export default function RegisterForm() {
 		defaultValues: {
 			name: "",
 			lastName: "",
-			email: "",
+			email: `${emailSearchParams || ""}`,
 			password: "",
 			confirm_password: ""
 		},
