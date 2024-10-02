@@ -2,16 +2,16 @@ import { Home, Info, MailPlus, SquareActivity } from "lucide-react";
 import Link from "next/link";
 import * as React from "react"
 
-export interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MenuHamburgerProps extends React.HTMLAttributes<HTMLDivElement> {
     pathname: string;
     navigationData: { title: string, href: string }[];
     comparePath: (pathname: string, itemPath: string) => Boolean;
     toggleDrawer: () => void;
 }
 
-const MenuHamburger = React.forwardRef<HTMLDivElement, SearchBarProps>(({ className, pathname, navigationData, comparePath, toggleDrawer, ...props }, ref) => {
+const MenuHamburger = React.forwardRef<HTMLDivElement, MenuHamburgerProps>(({ className, pathname, navigationData, comparePath, toggleDrawer, ...props }, ref) => {
     return(
-        <section className={`fixed mt-20 bottom-0 bg-white bg-opacity-40 backdrop-blur-2xl h-full w-full`}>
+        <section className={`fixed bg-white bg-opacity-40 backdrop-blur-2xl h-full w-full z-10`}>
             <section className="flex flex-col h-full mt-20 ml-2 justify-between animate-fade">
                 <section className="h-full mt-10">
                     <ul className="h-1/3 flex flex-col justify-between px-3 space-y-8">

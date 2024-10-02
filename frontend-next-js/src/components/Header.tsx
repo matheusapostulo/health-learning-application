@@ -71,9 +71,9 @@ export default function Header() {
         <>
         <Headroom
             style={{
-                    WebkitTransition: 'all 1s ease-in-out',
-
-                }}
+                WebkitTransition: 'all 1s ease-in-out',
+                zIndex: 20
+            }}
         >
             <header className={`flex flex-col justify-center h-16 bg-white w-full text-gray-main  ${open ? "backdrop-blur-none bg-opacity-0" : "backdrop-blur-sm bg-opacity-90"}`}>
                 {/* Header */}
@@ -112,8 +112,8 @@ export default function Header() {
                                 !open && 
                                 <>
                                     <Bell size={22.5} strokeWidth={1.5} color="#333333"/>
-                                    <div className="rounded-full h-8 w-8 mr-2 relative flex items-center">
-                                        <Image src={"/imagem_perfil_full.jpg"} fill={true} alt="user-image" className="rounded-full"/>
+                                    <div className="h-8 w-8 md:w-9 md:h-9 mr-2 relative flex items-center">
+                                        <Image src={"/imagem_perfil_full.jpg"} fill={true} alt="user-image" className="rounded-full object-cover"/>
                                     </div>  
                                 </>                              
                             ): (

@@ -10,6 +10,7 @@ export interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {
 const SearchBar = React.forwardRef<HTMLDivElement, SearchBarProps>(({ className, isSearchBarOpen, toggleSearchBar, ...props }, ref) => {
     return(
         <Drawer 
+            ref={ref}
             PaperProps={{          
                 className: "h-3/5 rounded-xl",         
             }} 

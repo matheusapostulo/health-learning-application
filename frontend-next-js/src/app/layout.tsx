@@ -23,7 +23,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
         <body className={inter.className}>
            <main className="h-screen text-gray-main flex flex-col">
             <Header/>
-            <section className="px-4 md:px-20 pt-6 md:pt-10 pb-6 md:pb-10">
+            <section className="pl-4 md:pl-20 pt-6 md:pt-10 pb-6 md:pb-10">
               {children}
             </section>
           </main>

@@ -24,6 +24,7 @@
     "react-dom": "^18",
     "react-headroom": "^3.2.1",
     "react-hook-form": "^7.53.0",
+    "swiper": "^11.1.14",
     "tailwind-merge": "^2.5.2",
     "zod": "^3.23.8"
   },

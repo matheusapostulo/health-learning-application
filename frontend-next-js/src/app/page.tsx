@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { auth } from "../../auth";
 import { TextHighlight } from "@/components/ui/text-highlight";
 import { SignOut } from "@/components/auth/signout-button";
 import HomeRegisterEmail from "@/components/auth/home-register-email";
+import { SwiperSlider } from "@/components/ui/swiper";
 
 export default async function Home() { 
   const session = await auth();
@@ -29,23 +29,11 @@ export default async function Home() {
   }
   return(
     <>
-      <h1 className="font-extrabold text-start text-3xl md:text-4xl mb-6">
+      <h1 className="font-extrabold text-start text-3xl md:text-4xl mb-8 md:mb-12">
         Bem Vindo(a), <TextHighlight>{session.user.user_data.name} {session.user.user_data.lastName}</TextHighlight>
       </h1>
+      <SwiperSlider title="Modelos em alta"/>
       <SignOut/>
-
-      {/* <div className="flex flex-col justify-center space-y-2 break-words">
-      <h1 className="pl-8 md:pl-28  text-2xl font-bold">Inicial</h1>
-        <div className="h-64 w-5/6 self-center bg-yellow-200"></div>
-        <div className="h-64 w-5/6 self-center bg-blue-500"></div>
-        <div className="h-64 w-5/6 self-center bg-red-400"></div>
-        <div className="h-64 w-5/6 self-center bg-yellow-200"></div>
-        <div className="h-64 w-5/6 self-center bg-blue-500"></div>
-        <div className="h-64 w-5/6 self-center bg-red-400"></div>
-        <div className="h-64 w-5/6 self-center bg-yellow-200"></div>
-        <div className="h-64 w-5/6 self-center bg-blue-500"></div>
-        <div className="h-64 w-5/6 self-center bg-red-400"></div>
-      </div> */}
     </>
   );
 
