@@ -9,7 +9,7 @@ export default async function Home() {
 
   if(!session) {
     return(
-      <section className="flex-col xl:mt-4 space-y-9 text-left sm:text-center">
+      <section className="flex-col px-4 md:px-20 xl:mt-4 space-y-9 text-left sm:text-center">
         <section className="flex flex-col space-y-4 text-left sm:text-center ">
           <h1 className="font-extrabold text-5xl md:text-7xl xl:text-8xl">
             Faça uma <TextHighlight>avaliação </TextHighlight> em nossos <TextHighlight>modelos</TextHighlight>
@@ -28,13 +28,13 @@ export default async function Home() {
     );
   }
   return(
-    <>
+    <section className="pl-4 md:pl-20">
       <h1 className="font-extrabold text-start text-3xl md:text-4xl mb-8 md:mb-12">
         Bem Vindo(a), <TextHighlight>{session.user.user_data.name} {session.user.user_data.lastName}</TextHighlight>
       </h1>
       <SwiperSlider title="Modelos em alta"/>
       <SignOut/>
-    </>
+    </section>
   );
 
 }
