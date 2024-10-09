@@ -5,7 +5,7 @@ import * as React from "react"
 export interface MenuHamburgerProps extends React.HTMLAttributes<HTMLDivElement> {
     pathname: string;
     navigationData: { title: string, href: string }[];
-    comparePath: (pathname: string, itemPath: string) => Boolean;
+    comparePath: (pathname: string, itemPath: string) => boolean;
     toggleDrawer: () => void;
 }
 

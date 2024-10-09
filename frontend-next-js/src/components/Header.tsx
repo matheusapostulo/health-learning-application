@@ -1,49 +1,46 @@
 "use client";
 
+import React from 'react';
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { Bell, Home, Info, MailPlus, Menu, Search, SquareActivity, X } from 'lucide-react';
-import { usePathname, useSearchParams } from "next/navigation";
+import { Bell, Search} from 'lucide-react';
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import Headroom from 'react-headroom';
 import { SearchBar } from "./ui/search-bar";
 import Image from "next/image";
 import { Turn as Hamburger} from "hamburger-react";
 import { MenuHamburger } from "./ui/menu-hamburger";
-import { useRouter } from "next/navigation";
-// Twirl Squash Fade Turn Slant
-
 
 const navigation = [ 
     { title: "Início", href:"/" }, { title: "Modelos", href:"/modelos" }, { title: "Sobre", href:"/sobre" }, { title: "Contato", href:"/contato" },
 ]
 
-function comparePath(pathname: string, itemPath: string): Boolean {
+function comparePath(pathname: string, itemPath: string): boolean {
     return pathname.toLowerCase() === itemPath.toLowerCase()
 }
 
-export default function Header() {
+const Header: React.FC = () => {
     const {data: session} = useSession();
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
     const reload: boolean = searchParams.has("reload");
-     // State para controlar o hamburger
-     const [open, setOpen] = useState<boolean>(false);
-     const [openSearchBar, setSearchBar] = useState<boolean>(false);
+    // State para controlar o hamburger
+    const [open, setOpen] = React.useState<boolean>(false);
+    const [openSearchBar, setSearchBar] = React.useState<boolean>(false);
 
     // Função para controlar o menu hamburguer
-    const toggleDrawer = () => () => {
+    const toggleDrawer = () => {
         setOpen(!open)
     };
 
-    const toggleSearchBar = () => () => {
+    const toggleSearchBar = () => {
         setSearchBar(!openSearchBar)
     }
 
     // Adding the class to the body when the Drawer is open
-    useEffect(() => {
+    React.useEffect(() => {
         if (open) {
             // Adiciona a classe quando a Drawer está aberta
             document.body.classList.add("overflow-hidden");
@@ -58,7 +55,7 @@ export default function Header() {
     }, [open]);
 
     // Updating the components in the screen when the user signsOut or signIn
-    useEffect(() => {
+    React.useEffect(() => {
         if(reload){
             router.push(pathname);
     		setTimeout(() => {
@@ -78,7 +75,7 @@ export default function Header() {
             <header className={`flex flex-col justify-center h-16 bg-white w-full text-gray-main  ${open ? "backdrop-blur-none bg-opacity-0" : "backdrop-blur-sm bg-opacity-90"}`}>
                 {/* Header */}
                     <nav className="flex flex-row h-10 items-center md:space-x-3 mx-4 md:mx-24 md:justify-between overflow-hidden">    
-                        <Link href="/" onClick={open ? toggleDrawer() : undefined}>
+                        <Link href="/" onClick={open ? toggleDrawer : undefined}>
                             <Image src={"/Logo.svg"} width={110} height={40} alt="Logo-image"></Image>
                         </Link>
                         <nav className="hidden lg:flex xl:ml-7 lg:ml-4 lg:mr-9">
@@ -102,9 +99,9 @@ export default function Header() {
                                         <input type="text" placeholder="Pesquisar" className="bg-transparent h-3/4 ml-2 max-x-fit focus:outline-none text-xs"/>
                                     </div>
                                 </section>
-                                <section className="md:hidden ml-auto mr-4" onClick={toggleSearchBar()}>
+                                <button className="md:hidden ml-auto mr-4" onClick={toggleSearchBar}>
                                     <Search size={20} className="font-gray-main"/>
-                                </section>
+                                </button>
                             </>
                         }
                         <section className="flex items-center space-x-4 md:space-x-5 mr-2 md:mr-0 h-full">
@@ -127,7 +124,7 @@ export default function Header() {
 
                         {/* Botton that will only appear on mobile, it's the hamburger menu */} 
                         <div className={`md:hidden flex items-center h-8 rounded-md order-first mr-2`} >                            
-                            <Hamburger size={20} duration={0.4} distance="md" color="#333333" rounded toggled={open} onToggle={toggleDrawer()}/>
+                            <Hamburger size={20} duration={0.4} distance="md" color="#333333" rounded toggled={open} onToggle={toggleDrawer}/>
                         </div>  
 
                     </nav>
@@ -135,10 +132,12 @@ export default function Header() {
         </Headroom>
 
         {open ? 
-            <MenuHamburger pathname={pathname} navigationData={navigation} comparePath={comparePath} toggleDrawer={toggleDrawer()}/>
+            <MenuHamburger pathname={pathname} navigationData={navigation} comparePath={comparePath} toggleDrawer={toggleDrawer}/>
         : null}
 
-        <SearchBar isSearchBarOpen={openSearchBar} toggleSearchBar={toggleSearchBar()}/>
+        <SearchBar isSearchBarOpen={openSearchBar} toggleSearchBar={toggleSearchBar}/>
         </>
     )
 }
+
+export default Header;

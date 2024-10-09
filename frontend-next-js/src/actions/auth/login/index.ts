@@ -3,21 +3,9 @@
 import { LoginSchema } from "@/schemas/auth";
 import type { z } from "zod";
 import { signIn } from "../../../../auth";
-import { AuthError, CredentialsSignin } from "next-auth";
+import { AuthError } from "next-auth";
 import { UserNotFoundError } from "@/lib/auth/user-not-found";
 import { InvalidCredentials } from "@/lib/auth/invalid-credentials";
-
-// type UserWithoutConfirmPassword = {
-//     name: string;
-//     lastName: string;
-//     email: string;
-//     password: string;
-// }
-
-// const removeConfirmPassword = (user: z.infer<typeof RegisterSchema>): UserWithoutConfirmPassword => {
-//     const { confirm_password, ...userWithoutConfirmPassword } = user;
-//     return userWithoutConfirmPassword;
-// };
 
 /**
  * This method creates the user for Credentials provider
