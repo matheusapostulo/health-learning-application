@@ -2,6 +2,8 @@ import { Api } from "../Api";
 import express, { Express, NextFunction, Request, Response } from "express";
 import Route from "./routes/Route";
 import JwtService from "../../../application/ports/JwtService";
+import { AuthenticateUserError } from "../../../application/errors/AuthenticateUser.error";
+import { error } from "console";
 
 export default class ApiExpress implements Api{
     private app: Express;
@@ -54,15 +56,17 @@ export default class ApiExpress implements Api{
     private checkTokenAndAuthorize = async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization;
         const token = authHeader?.split(" ")[1];
+        const notFoundToken = new AuthenticateUserError.NotFoundTokenError();
+        const invalidToken = new AuthenticateUserError.InvalidTokenError();
 
         if(!token) {
-            return res.status(401).json({message: "Erro: Token não enviado."});
+            return res.status(notFoundToken.statusCode).json({error_code: notFoundToken.errorCode, error_description: notFoundToken.message});
         }
 
         const isTokenValid = await this.jwtService.checkToken(token);
 
         if(!isTokenValid){
-            return res.status(401).json({message: "Error: Invalid Token."});
+            return res.status(invalidToken.statusCode).json({error_code: invalidToken.errorCode , error_description: invalidToken.message});
         }
 
         return next();
